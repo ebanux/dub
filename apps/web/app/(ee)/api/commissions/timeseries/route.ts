@@ -41,14 +41,15 @@ export const GET = withWorkspace(async ({ workspace, searchParams }) => {
     timezone,
   });
 
-  const { dateFormat, dateIncrement, startFunction, formatString } =
+  const { dateFormat, dateTrunc, dateIncrement, startFunction, formatString } =
     sqlGranularityMap[granularity];
+
+  const timezoneToUse = timezone || "UTC";
+  const truncatedCreatedAt = Prisma.sql`date_trunc(${dateTrunc}, ("createdAt" AT TIME ZONE 'UTC') AT TIME ZONE ${timezoneToUse})`;
 
   const commissions = await prisma.$queryRaw<Commission[]>`
       SELECT
-        ${Prisma.sql`to_char(("createdAt" AT TIME ZONE 'UTC') AT TIME ZONE ${
-            timezone || "UTC"
-          }, ${dateFormat})`} AS start,
+        ${Prisma.sql`to_char(${truncatedCreatedAt}, ${dateFormat})`} AS start,
         SUM("earnings") AS earnings
       FROM "Commission"
       WHERE
@@ -56,8 +57,8 @@ export const GET = withWorkspace(async ({ workspace, searchParams }) => {
         AND "programId" = ${programId}
         AND "createdAt" >= ${startDate}
         AND "createdAt" < ${endDate}
-      GROUP BY start
-      ORDER BY start ASC;`;
+      GROUP BY ${truncatedCreatedAt}
+      ORDER BY ${truncatedCreatedAt} ASC;`;
 
   let currentDate = startFunction(
     DateTime.fromJSDate(startDate).setZone(timezone || "UTC"),

@@ -113,7 +113,10 @@ export const GET = withWorkspace(
       });
     }
 
-    const { dateFormat } = sqlGranularityMap[granularity];
+    const { dateFormat, dateTrunc } = sqlGranularityMap[granularity];
+
+    const timezoneToUse = timezone || "UTC";
+    const truncatedCreatedAt = Prisma.sql`date_trunc(${dateTrunc}, ("createdAt" AT TIME ZONE 'UTC') AT TIME ZONE ${timezoneToUse})`;
 
     // Group by timeseries
     if (groupBy === "timeseries") {
@@ -121,9 +124,7 @@ export const GET = withWorkspace(
         { start: string; earnings: number }[]
       >`
     SELECT
-      ${Prisma.sql`to_char(("createdAt" AT TIME ZONE 'UTC') AT TIME ZONE ${
-        timezone || "UTC"
-      }, ${dateFormat})`} AS start,
+      ${Prisma.sql`to_char(${truncatedCreatedAt}, ${dateFormat})`} AS start,
       SUM("earnings") AS earnings
     FROM "Commission"
     WHERE
@@ -134,8 +135,8 @@ export const GET = withWorkspace(
       AND "type" = 'sale'
       AND "createdAt" >= ${startDate}
       AND "createdAt" < ${endDate}
-    GROUP BY start
-    ORDER BY start ASC;`;
+    GROUP BY ${truncatedCreatedAt}
+    ORDER BY ${truncatedCreatedAt} ASC;`;
 
       const earningsLookup = Object.fromEntries(
         earnings.map((item) => [
