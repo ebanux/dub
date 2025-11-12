@@ -1,6 +1,6 @@
 import { handleAndReturnErrorResponse } from "@/lib/api/errors";
 import { verifyVercelSignature } from "@/lib/cron/verify-vercel";
-import { conn } from "@/lib/planetscale";
+import { conn } from "@/lib/postgres";
 import {
   PartnerActivityEvent,
   partnerActivityStream,
@@ -171,15 +171,21 @@ const processPartnerActivityStreamBatch = () =>
             try {
               // Update program enrollment stats
               if (finalStatsToUpdate.length > 0) {
+                const assignments = finalStatsToUpdate
+                  .map(([key], index) => `"${key}" = $${index + 1}`)
+                  .join(", ");
+                const params = [
+                  ...finalStatsToUpdate.map(([, value]) => value),
+                  programId,
+                  partnerId,
+                ];
+
+                const programIdIndex = params.length - 1;
+                const partnerIdIndex = params.length;
+
                 await conn.execute(
-                  `UPDATE ProgramEnrollment SET ${finalStatsToUpdate
-                    .map(([key, _]) => `${key} = ?`)
-                    .join(", ")} WHERE programId = ? AND partnerId = ?`,
-                  [
-                    ...finalStatsToUpdate.map(([_, value]) => value),
-                    programId,
-                    partnerId,
-                  ],
+                  `UPDATE "ProgramEnrollment" SET ${assignments} WHERE "programId" = $${programIdIndex} AND "partnerId" = $${partnerIdIndex}`,
+                  params,
                 );
               }
               totalProcessed++;

@@ -5,7 +5,7 @@ import { linkCache } from "@/lib/api/links/cache";
 import { recordClickCache } from "@/lib/api/links/record-click-cache";
 import { parseRequestBody } from "@/lib/api/utils";
 import { getIdentityHash } from "@/lib/middleware/utils";
-import { getLinkViaEdge, getWorkspaceViaEdge } from "@/lib/planetscale";
+import { getLinkViaEdge, getWorkspaceViaEdge } from "@/lib/postgres";
 import { recordClick } from "@/lib/tinybird";
 import { RedisLinkProps } from "@/lib/types";
 import { formatRedisLink, redis } from "@/lib/upstash";

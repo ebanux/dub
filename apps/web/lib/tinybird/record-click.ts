@@ -16,7 +16,7 @@ import {
   getFinalUrlForRecordClick,
   getIdentityHash,
 } from "../middleware/utils";
-import { conn } from "../planetscale";
+import { conn } from "../postgres";
 import { WorkspaceProps } from "../types";
 import { redis } from "../upstash";
 import {
@@ -196,9 +196,9 @@ export async function recordClick({
         recordClickCache.set({ domain, key, identityHash, clickId }),
 
         // increment the click count for the link (based on their ID)
-        // we have to use planetscale connection directly (not prismaEdge) because of connection pooling
+        // we have to use the pooled Postgres connection directly (not prismaEdge) because of connection pooling
         conn.execute(
-          "UPDATE Link SET clicks = clicks + 1, lastClicked = NOW() WHERE id = ?",
+          'UPDATE "Link" SET "clicks" = "clicks" + 1, "lastClicked" = NOW() WHERE "id" = $1',
           [linkId],
         ),
         // if the link is associated with a workspace + has a destination URL
@@ -212,7 +212,7 @@ export async function recordClick({
           }).catch(() => {
             // Fallback on writing directly to the database
             return conn.execute(
-              "UPDATE Project p JOIN Link l ON p.id = l.projectId SET p.usage = p.usage + 1, p.totalClicks = p.totalClicks + 1 WHERE l.id = ?",
+              'UPDATE "Project" AS p SET "usage" = "usage" + 1, "totalClicks" = "totalClicks" + 1 FROM "Link" AS l WHERE l."id" = $1 AND l."projectId" = p."id"',
               [linkId],
             );
           }),
@@ -227,7 +227,7 @@ export async function recordClick({
           }).catch(() => {
             // Fallback on writing directly to the database
             return conn.execute(
-              "UPDATE ProgramEnrollment SET totalClicks = totalClicks + 1 WHERE programId = ? AND partnerId = ?",
+              'UPDATE "ProgramEnrollment" SET "totalClicks" = "totalClicks" + 1 WHERE "programId" = $1 AND "partnerId" = $2',
               [programId, partnerId],
             );
           }),
@@ -281,7 +281,7 @@ export async function recordClick({
       const hasWebhooks = webhookIds && webhookIds.length > 0;
       if (workspaceId && hasWebhooks) {
         const workspaceRows = await conn.execute(
-          "SELECT usage, usageLimit FROM Project WHERE id = ? LIMIT 1",
+          'SELECT "usage", "usageLimit" FROM "Project" WHERE "id" = $1 LIMIT 1',
           [workspaceId],
         );
 
@@ -340,28 +340,30 @@ async function sendLinkClickWebhooks({
   const link = await conn
     .execute(
       `
-    SELECT 
+    SELECT
       l.*,
-      JSON_ARRAYAGG(
-        IF(t.id IS NOT NULL,
-          JSON_OBJECT('tag', JSON_OBJECT('id', t.id, 'name', t.name, 'color', t.color)),
-          NULL
-        )
-      ) as tags
-    FROM Link l
-    LEFT JOIN LinkTag lt ON l.id = lt.linkId
-    LEFT JOIN Tag t ON lt.tagId = t.id
-    WHERE l.id = ?
-    GROUP BY l.id
+      COALESCE(
+        jsonb_agg(
+          jsonb_build_object(
+            'tag',
+            jsonb_build_object(
+              'id', t.id,
+              'name', t.name,
+              'color', t.color
+            )
+          )
+        ) FILTER (WHERE t.id IS NOT NULL),
+        '[]'::jsonb
+      ) AS tags
+    FROM "Link" l
+    LEFT JOIN "LinkTag" lt ON l."id" = lt."linkId"
+    LEFT JOIN "Tag" t ON lt."tagId" = t."id"
+    WHERE l."id" = $1
+    GROUP BY l."id"
   `,
       [linkId],
     )
-    .then((res) => {
-      const row = res.rows[0] as any;
-      // Handle case where there are no tags (JSON_ARRAYAGG returns [null])
-      row.tags = row.tags?.[0] === null ? [] : row.tags;
-      return row;
-    });
+    .then((res) => res.rows[0] as any);
 
   await sendWebhooks({
     trigger: "link.clicked",

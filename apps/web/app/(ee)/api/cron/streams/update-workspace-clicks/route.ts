@@ -1,6 +1,6 @@
 import { handleAndReturnErrorResponse } from "@/lib/api/errors";
 import { verifyVercelSignature } from "@/lib/cron/verify-vercel";
-import { conn } from "@/lib/planetscale";
+import { conn } from "@/lib/postgres";
 import {
   ClickEvent,
   RedisStreamEntry,
@@ -108,7 +108,7 @@ const processWorkspaceUpdateStreamBatch = () =>
             try {
               // Update the workspace usage and click counts
               await conn.execute(
-                "UPDATE Project p SET p.usage = p.usage + ?, p.totalClicks = p.totalClicks + ? WHERE id = ?",
+                'UPDATE "Project" SET "usage" = "usage" + $1, "totalClicks" = "totalClicks" + $2 WHERE "id" = $3',
                 [update.clicks, update.clicks, update.workspaceId],
               );
 

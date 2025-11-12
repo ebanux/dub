@@ -5,7 +5,7 @@ import { recordClickCache } from "@/lib/api/links/record-click-cache";
 import { parseRequestBody } from "@/lib/api/utils";
 import { getIdentityHash } from "@/lib/middleware/utils";
 import { DeepLinkClickData } from "@/lib/middleware/utils/cache-deeplink-click-data";
-import { getLinkViaEdge } from "@/lib/planetscale";
+import { getLinkViaEdge } from "@/lib/postgres";
 import { recordClick } from "@/lib/tinybird";
 import { RedisLinkProps } from "@/lib/types";
 import { formatRedisLink, redis } from "@/lib/upstash";

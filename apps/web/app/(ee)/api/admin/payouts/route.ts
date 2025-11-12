@@ -1,7 +1,7 @@
 import { getStartEndDates } from "@/lib/analytics/utils/get-start-end-dates";
 import { withAdmin } from "@/lib/auth";
-import { sqlGranularityMap } from "@/lib/planetscale/granularity";
-import { prisma } from "@dub/prisma";
+import { sqlGranularityMap } from "@/lib/postgres/granularity";
+import { prisma, Prisma } from "@dub/prisma";
 import { ACME_PROGRAM_ID } from "@dub/utils";
 import { DateTime } from "luxon";
 import { NextResponse } from "next/server";
@@ -82,18 +82,20 @@ export const GET = withAdmin(async ({ searchParams }) => {
   const timeseriesData = await prisma.$queryRaw<
     { date: Date; payouts: number; fees: number; total: number }[]
   >`
-    SELECT 
-      DATE_FORMAT(CONVERT_TZ(createdAt, "UTC", ${timezone}), ${dateFormat}) as date,
-      SUM(amount) as payouts,
-      SUM(fee) as fees,
-      SUM(total) as total
-    FROM Invoice
-    WHERE 
-      programId != ${ACME_PROGRAM_ID}
-      AND status != 'failed'
-      AND createdAt >= ${startDate}
-      AND createdAt <= ${endDate}
-    GROUP BY DATE_FORMAT(CONVERT_TZ(createdAt, "UTC", ${timezone}), ${dateFormat})
+    SELECT
+      ${Prisma.sql`to_char(("createdAt" AT TIME ZONE 'UTC') AT TIME ZONE ${
+        timezone
+      }, ${dateFormat})`} as date,
+      SUM("amount") as payouts,
+      SUM("fee") as fees,
+      SUM("total") as total
+    FROM "Invoice"
+    WHERE
+      "programId" != ${ACME_PROGRAM_ID}
+      AND "status" != 'failed'
+      AND "createdAt" >= ${startDate}
+      AND "createdAt" <= ${endDate}
+    GROUP BY date
     ORDER BY date ASC;
   `;
 

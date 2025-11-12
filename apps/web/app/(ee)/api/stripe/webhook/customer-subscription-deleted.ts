@@ -18,7 +18,7 @@ export async function customerSubscriptionDeleted(event: Stripe.Event) {
   const stripeId = subscriptionDeleted.customer.toString();
 
   // If a workspace deletes their subscription, reset their usage limit in the database to 1000.
-  // Also remove the root domain link for all their domains from MySQL, Redis, and Tinybird
+  // Also remove the root domain link for all their domains from the database, Redis, and Tinybird
   const workspace = await prisma.project.findUnique({
     where: {
       stripeId,
@@ -154,7 +154,7 @@ export async function customerSubscriptionDeleted(event: Stripe.Event) {
       },
     }),
 
-    // remove root domain link for all domains from MySQL
+    // remove root domain link for all domains from the database
     prisma.link.updateMany({
       where: {
         id: {

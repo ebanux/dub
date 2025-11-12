@@ -4,7 +4,7 @@ import { prisma } from "@dub/prisma";
 import { linkConstructor, punyEncode } from "@dub/utils";
 import { FolderAccessLevel } from "@prisma/client";
 import { decodeKeyIfCaseSensitive } from "../api/links/case-sensitivity";
-import { conn } from "../planetscale";
+import { conn } from "../postgres";
 import z from "../zod";
 import { analyticsFilterTB } from "../zod/schemas/analytics";
 import { analyticsResponse } from "../zod/schemas/analytics-response";
@@ -65,7 +65,7 @@ export const getAnalytics = async (params: AnalyticsFilters) => {
     // Handle single linkId
     if (linkId) {
       const response = await conn.execute(
-        `SELECT ${columns} FROM Link WHERE id = ?`,
+        `SELECT ${columns} FROM "Link" WHERE "id" = $1`,
         [linkId],
       );
 
@@ -74,7 +74,9 @@ export const getAnalytics = async (params: AnalyticsFilters) => {
 
     // Handle multiple linkIds with aggregation
     if (linkIds && linkIds.length > 0) {
-      const linkIdsToFilter = linkIds.map(() => "?").join(",");
+      const linkIdsToFilter = linkIds
+        .map((_, index) => `$${index + 1}`)
+        .join(",");
       const aggregateColumns =
         event === "composite"
           ? `SUM(clicks) as clicks, SUM(leads) as leads, SUM(sales) as sales, SUM(saleAmount) as saleAmount`
@@ -83,7 +85,7 @@ export const getAnalytics = async (params: AnalyticsFilters) => {
             : `SUM(${event}) as ${event}`;
 
       const response = await conn.execute(
-        `SELECT ${aggregateColumns} FROM Link WHERE id IN (${linkIdsToFilter})`,
+        `SELECT ${aggregateColumns} FROM "Link" WHERE "id" IN (${linkIdsToFilter})`,
         linkIds,
       );
 
