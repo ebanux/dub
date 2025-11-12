@@ -174,18 +174,13 @@ const processPartnerActivityStreamBatch = () =>
                 const assignments = finalStatsToUpdate
                   .map(([key], index) => `"${key}" = $${index + 1}`)
                   .join(", ");
-                const params = [
-                  ...finalStatsToUpdate.map(([, value]) => value),
-                  programId,
-                  partnerId,
-                ];
-
-                const programIdIndex = params.length - 1;
-                const partnerIdIndex = params.length;
+                const setValues = finalStatsToUpdate.map(([, value]) => value);
+                const programIdParamIndex = setValues.length + 1;
+                const partnerIdParamIndex = setValues.length + 2;
 
                 await conn.execute(
-                  `UPDATE "ProgramEnrollment" SET ${assignments} WHERE "programId" = $${programIdIndex} AND "partnerId" = $${partnerIdIndex}`,
-                  params,
+                  `UPDATE "ProgramEnrollment" SET ${assignments} WHERE "programId" = $${programIdParamIndex} AND "partnerId" = $${partnerIdParamIndex}`,
+                  [...setValues, programId, partnerId],
                 );
               }
               totalProcessed++;
