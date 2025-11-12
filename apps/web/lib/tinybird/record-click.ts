@@ -343,17 +343,17 @@ async function sendLinkClickWebhooks({
     SELECT
       l.*,
       COALESCE(
-        jsonb_agg(
+        json_agg(
           jsonb_build_object(
             'tag',
             jsonb_build_object(
-              'id', t.id,
-              'name', t.name,
-              'color', t.color
+              'id', t."id",
+              'name', t."name",
+              'color', t."color"
             )
           )
-        ) FILTER (WHERE t.id IS NOT NULL),
-        '[]'::jsonb
+        ) FILTER (WHERE t."id" IS NOT NULL),
+        '[]'::json
       ) AS tags
     FROM "Link" l
     LEFT JOIN "LinkTag" lt ON l."id" = lt."linkId"
