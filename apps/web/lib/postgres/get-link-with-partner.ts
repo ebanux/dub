@@ -34,27 +34,26 @@ export const getLinkWithPartner = async ({
 
   console.time("getLinkWithPartner");
 
-  const { rows } =
-    (await conn.execute(
-      `SELECT 
-        Link.*,
-        Partner.id as partnerId,
-        Partner.name as partnerName,
-        Partner.image as partnerImage,
-        PartnerDiscount.id as discountId,
-        PartnerDiscount.amount as discountAmount,
-        PartnerDiscount.type as discountType,
-        PartnerDiscount.maxDuration as discountMaxDuration,
-        PartnerDiscount.couponId as discountCouponId,
-        PartnerDiscount.couponTestId as discountCouponTestId
-       FROM Link
-       LEFT JOIN ProgramEnrollment ON ProgramEnrollment.programId = Link.programId AND ProgramEnrollment.partnerId = Link.partnerId
-       LEFT JOIN Partner ON Partner.id = ProgramEnrollment.partnerId
-       LEFT JOIN Discount PartnerDiscount ON ProgramEnrollment.discountId = PartnerDiscount.id
-       LEFT JOIN Program ON Program.id = Link.programId
-       WHERE Link.domain = ? AND Link.key = ?`,
-      [domain, keyToQuery],
-    )) || {};
+  const { rows } = await conn.execute(
+    `SELECT
+        "Link".*,
+        "Partner"."id" as "partnerId",
+        "Partner"."name" as "partnerName",
+        "Partner"."image" as "partnerImage",
+        "PartnerDiscount"."id" as "discountId",
+        "PartnerDiscount"."amount" as "discountAmount",
+        "PartnerDiscount"."type" as "discountType",
+        "PartnerDiscount"."maxDuration" as "discountMaxDuration",
+        "PartnerDiscount"."couponId" as "discountCouponId",
+        "PartnerDiscount"."couponTestId" as "discountCouponTestId"
+       FROM "Link"
+       LEFT JOIN "ProgramEnrollment" ON "ProgramEnrollment"."programId" = "Link"."programId" AND "ProgramEnrollment"."partnerId" = "Link"."partnerId"
+       LEFT JOIN "Partner" ON "Partner"."id" = "ProgramEnrollment"."partnerId"
+       LEFT JOIN "Discount" "PartnerDiscount" ON "ProgramEnrollment"."discountId" = "PartnerDiscount"."id"
+       LEFT JOIN "Program" ON "Program"."id" = "Link"."programId"
+       WHERE "Link"."domain" = $1 AND "Link"."key" = $2`,
+    [domain, keyToQuery],
+  );
 
   console.timeEnd("getLinkWithPartner");
 

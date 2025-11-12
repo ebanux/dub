@@ -10,25 +10,25 @@ export const sqlGranularityMap: Record<
   }
 > = {
   month: {
-    dateFormat: "%Y-%m",
+    dateFormat: "YYYY-MM",
     dateIncrement: (dt) => dt.plus({ month: 1 }),
     startFunction: (dt) => dt.startOf("month"),
     formatString: "yyyy-MM",
   },
   day: {
-    dateFormat: "%Y-%m-%d",
+    dateFormat: "YYYY-MM-DD",
     dateIncrement: (dt) => dt.plus({ day: 1 }),
     startFunction: (dt) => dt.startOf("day"),
     formatString: "yyyy-MM-dd",
   },
   hour: {
-    dateFormat: "%Y-%m-%d %H:00",
+    dateFormat: "YYYY-MM-DD HH24:00",
     dateIncrement: (dt) => dt.plus({ hour: 1 }),
     startFunction: (dt) => dt.startOf("hour"),
     formatString: "yyyy-MM-dd HH:00",
   },
   minute: {
-    dateFormat: "%Y-%m-%d %H:%i",
+    dateFormat: "YYYY-MM-DD HH24:MI",
     dateIncrement: (dt) => dt.plus({ minute: 1 }),
     startFunction: (dt) => dt.startOf("minute"),
     formatString: "yyyy-MM-dd HH:mm",

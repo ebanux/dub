@@ -1,6 +1,6 @@
 import { DubApiError } from "@/lib/api/errors";
 import { isBlacklistedKey, isReservedUsername } from "@/lib/edge-config";
-import { checkIfKeyExists } from "@/lib/planetscale";
+import { checkIfKeyExists } from "@/lib/postgres";
 import { WorkspaceProps } from "@/lib/types";
 import {
   DEFAULT_REDIRECTS,

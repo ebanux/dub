@@ -25,7 +25,7 @@ import { z } from "zod";
  *    - Gathers analytics for three time periods:
  *      * Current month (1 month ago) - current reporting period (from Tinybird)
  *      * Previous month (2 months ago) - previous reporting period for comparison (from Tinybird)
- *      * Lifetime - all-time stats (from MySQL)
+ *      * Lifetime - all-time stats (from the database)
  *    - Collects metrics: clicks, leads, sales, and earnings
  */
 
@@ -265,7 +265,7 @@ async function handler(req: Request) {
         // get previous and current month analytics from Tinybird
         const _previousMonthAnalytics = previousAnalyticsMap.get(partner.id);
         const _currentMonthAnalytics = currentAnalyticsMap.get(partner.id);
-        // get lifetime analytics from MySQL
+        // get lifetime analytics from the database
         const _lifetimeAnalytics = programEnrollments
           .find((enrollment) => enrollment.partner.id === partner.id)
           ?.links.reduce((acc, link) => ({
@@ -274,7 +274,7 @@ async function handler(req: Request) {
             sales: acc.sales + link.sales,
           }));
 
-        // get earnings data from MySQL
+        // get earnings data from the database
         const _previousMonthEarnings = previousEarningsMap.get(partner.id);
         const _currentMonthEarnings = currentEarningsMap.get(partner.id);
         const _lifetimeEarnings = lifetimeEarningsMap.get(partner.id);

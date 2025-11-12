@@ -2,38 +2,36 @@
 version: "3.8"
 
 services:
-  ps-mysql:
-    image: mysql:8.0
+  postgres:
+    image: postgres:16
     restart: always
     environment:
-      MYSQL_DATABASE: planetscale
-      MYSQL_ROOT_HOST: "%"
-      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-    command:
-      [
-        "--max_connections=1000",
-        "--default-authentication-plugin=mysql_native_password",
-      ]
+      POSTGRES_DB: dub
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${SUPABASE_DB_PASSWORD:-postgres}
     ports:
-      - 3306:3306
+      - 5432:5432
     volumes:
-      - ps-mysql:/var/lib/mysql
+      - postgres-data:/var/lib/postgresql/data
 
-  planetscale-proxy:
-    image: ghcr.io/mattrobenolt/ps-http-sim:latest
-    command:
-      [
-        "-mysql-no-pass",
-        "-listen-port=3900",
-        "-mysql-dbname=planetscale",
-        "-mysql-addr=ps-mysql",
-      ]
+  # Optional: Supabase Studio for inspecting your database.
+  # Set SUPABASE_URL / SUPABASE_ANON_KEY / SUPABASE_SERVICE_ROLE_KEY in your environment if you connect to a hosted project.
+  supabase-studio:
+    image: supabase/studio:latest
+    restart: always
     depends_on:
-      - ps-mysql
+      - postgres
+    environment:
+      SUPABASE_URL: http://localhost:54321
+      SUPABASE_ANON_KEY: ${SUPABASE_ANON_KEY:-anon-key}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:-service-role-key}
+      POSTGRES_PASSWORD: ${SUPABASE_DB_PASSWORD:-postgres}
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: dub
+      POSTGRES_USER: postgres
     ports:
-      - 3900:3900
-    links:
-      - ps-mysql
+      - 54323:3000
 
   mailhog:
     image: "mailhog/mailhog:latest"
@@ -42,4 +40,4 @@ services:
       - "8025:8025"
 
 volumes:
-  ps-mysql:
+  postgres-data:

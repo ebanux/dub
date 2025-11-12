@@ -1,4 +1,4 @@
-import { getPartnerAndDiscount } from "@/lib/planetscale/get-partner-discount";
+import { getPartnerAndDiscount } from "@/lib/postgres/get-partner-discount";
 import { isNotHostedImage, storage } from "@/lib/storage";
 import { recordLink } from "@/lib/tinybird";
 import { LinkProps, ProcessedLinkProps } from "@/lib/types";

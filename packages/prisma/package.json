@@ -14,9 +14,9 @@
     "format": "npx prisma format --schema=./schema"
   },
   "dependencies": {
-    "@planetscale/database": "^1.18.0",
-    "@prisma/adapter-planetscale": "^5.18.0",
-    "@prisma/client": "5.18.0"
+    "@prisma/adapter-pg": "^5.18.0",
+    "@prisma/client": "5.18.0",
+    "pg": "^8.13.1"
   },
   "devDependencies": {
     "@types/node": "18.11.9",
@@ -42,7 +42,8 @@
     "dub",
     "dub.co",
     "prisma",
-    "planetscale"
+    "postgres",
+    "supabase"
   ],
   "publishConfig": {
     "access": "public"

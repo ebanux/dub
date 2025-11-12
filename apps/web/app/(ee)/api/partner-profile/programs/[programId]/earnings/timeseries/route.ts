@@ -1,7 +1,7 @@
 import { getStartEndDates } from "@/lib/analytics/utils/get-start-end-dates";
 import { getProgramEnrollmentOrThrow } from "@/lib/api/programs/get-program-enrollment-or-throw";
 import { withPartnerProfile } from "@/lib/auth/partner";
-import { sqlGranularityMap } from "@/lib/planetscale/granularity";
+import { sqlGranularityMap } from "@/lib/postgres/granularity";
 import { getPartnerEarningsTimeseriesSchema } from "@/lib/zod/schemas/partner-profile";
 import { prisma } from "@dub/prisma";
 import { Prisma } from "@prisma/client";
@@ -50,23 +50,37 @@ export const GET = withPartnerProfile(
         earnings: number;
       }[]
     >`
-      SELECT 
-        DATE_FORMAT(CONVERT_TZ(createdAt, "UTC", ${timezone || "UTC"}), ${dateFormat}) AS start, 
-        ${groupBy ? (groupBy === "type" ? Prisma.sql`type,` : Prisma.sql`linkId,`) : Prisma.sql``}
-        SUM(earnings) AS earnings
-      FROM Commission
-      WHERE 
-        earnings > 0
-        AND programId = ${program.id}
-        AND partnerId = ${partner.id}
-        AND createdAt >= ${startDate}
-        AND createdAt < ${endDate}
-        ${type ? Prisma.sql`AND type = ${type}` : Prisma.sql``}
-        ${payoutId ? Prisma.sql`AND payoutId = ${payoutId}` : Prisma.sql``}
-        ${linkId ? Prisma.sql`AND linkId = ${linkId}` : Prisma.sql``}
-        ${customerId ? Prisma.sql`AND customerId = ${customerId}` : Prisma.sql``}
-        ${status ? Prisma.sql`AND status = ${status}` : Prisma.sql``}
-        GROUP BY start${groupBy ? (groupBy === "type" ? Prisma.sql`, type` : Prisma.sql`, linkId`) : Prisma.sql``}
+      SELECT
+        ${Prisma.sql`to_char(("createdAt" AT TIME ZONE 'UTC') AT TIME ZONE ${
+          timezone || "UTC"
+        }, ${dateFormat})`} AS start,
+        ${
+          groupBy
+            ? groupBy === "type"
+              ? Prisma.sql`"type",`
+              : Prisma.sql`"linkId",`
+            : Prisma.sql``
+        }
+        SUM("earnings") AS earnings
+      FROM "Commission"
+      WHERE
+        "earnings" > 0
+        AND "programId" = ${program.id}
+        AND "partnerId" = ${partner.id}
+        AND "createdAt" >= ${startDate}
+        AND "createdAt" < ${endDate}
+        ${type ? Prisma.sql`AND "type" = ${type}` : Prisma.sql``}
+        ${payoutId ? Prisma.sql`AND "payoutId" = ${payoutId}` : Prisma.sql``}
+        ${linkId ? Prisma.sql`AND "linkId" = ${linkId}` : Prisma.sql``}
+        ${customerId ? Prisma.sql`AND "customerId" = ${customerId}` : Prisma.sql``}
+        ${status ? Prisma.sql`AND "status" = ${status}` : Prisma.sql``}
+        GROUP BY start${
+          groupBy
+            ? groupBy === "type"
+              ? Prisma.sql`, "type"`
+              : Prisma.sql`, "linkId"`
+            : Prisma.sql``
+        }
       ORDER BY start ASC;
     `;
 

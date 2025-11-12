@@ -1,11 +1,13 @@
 import { punyEncode } from "@dub/utils";
 import {
+  decodeKeyIfCaseSensitive,
   encodeKey,
   isCaseSensitiveDomain,
 } from "../api/links/case-sensitivity";
 import { conn } from "./connection";
+import { EdgeLinkProps } from "./types";
 
-export const checkIfKeyExists = async ({
+export const getLinkViaEdge = async ({
   domain,
   key,
 }: {
@@ -17,14 +19,18 @@ export const checkIfKeyExists = async ({
     ? // for case sensitive domains, we need to encode the key
       encodeKey(key)
     : // for non-case sensitive domains, we need to make sure that the key is always URI-decoded + punycode-encoded
-      // (cause that's how we store it in MySQL)
+      // (cause that's how we store it in the database)
       punyEncode(decodeURIComponent(key));
 
-  const { rows } =
-    (await conn.execute(
-      "SELECT 1 FROM Link WHERE domain = ? AND `key` = ? LIMIT 1",
-      [domain, keyToQuery],
-    )) || {};
+  const { rows } = await conn.execute<EdgeLinkProps>(
+    'SELECT * FROM "Link" WHERE "domain" = $1 AND "key" = $2 LIMIT 1',
+    [domain, keyToQuery],
+  );
 
-  return rows && Array.isArray(rows) && rows.length > 0;
+  const link =
+    rows && Array.isArray(rows) && rows.length > 0 ? rows[0] : null;
+
+  return link
+    ? { ...link, key: decodeKeyIfCaseSensitive({ domain, key }) }
+    : null;
 };

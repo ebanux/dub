@@ -2,9 +2,9 @@ import { getStartEndDates } from "@/lib/analytics/utils/get-start-end-dates";
 import { getDefaultProgramIdOrThrow } from "@/lib/api/programs/get-default-program-id-or-throw";
 import { getProgramOrThrow } from "@/lib/api/programs/get-program-or-throw";
 import { withWorkspace } from "@/lib/auth";
-import { sqlGranularityMap } from "@/lib/planetscale/granularity";
+import { sqlGranularityMap } from "@/lib/postgres/granularity";
 import { analyticsQuerySchema } from "@/lib/zod/schemas/analytics";
-import { prisma } from "@dub/prisma";
+import { prisma, Prisma } from "@dub/prisma";
 import { DateTime } from "luxon";
 import { NextResponse } from "next/server";
 
@@ -45,15 +45,17 @@ export const GET = withWorkspace(async ({ workspace, searchParams }) => {
     sqlGranularityMap[granularity];
 
   const commissions = await prisma.$queryRaw<Commission[]>`
-      SELECT 
-        DATE_FORMAT(CONVERT_TZ(createdAt, "UTC", ${timezone || "UTC"}), ${dateFormat}) AS start, 
-        SUM(earnings) AS earnings
-      FROM Commission
-      WHERE 
-        earnings > 0
-        AND programId = ${programId}
-        AND createdAt >= ${startDate}
-        AND createdAt < ${endDate}
+      SELECT
+        ${Prisma.sql`to_char(("createdAt" AT TIME ZONE 'UTC') AT TIME ZONE ${
+            timezone || "UTC"
+          }, ${dateFormat})`} AS start,
+        SUM("earnings") AS earnings
+      FROM "Commission"
+      WHERE
+        "earnings" > 0
+        AND "programId" = ${programId}
+        AND "createdAt" >= ${startDate}
+        AND "createdAt" < ${endDate}
       GROUP BY start
       ORDER BY start ASC;`;
 
