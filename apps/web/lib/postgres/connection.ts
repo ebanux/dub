@@ -30,6 +30,29 @@ export const query = async <T = unknown>(
   }
 };
 
+const convertQuestionMarksToNumberedParameters = (
+  text: string,
+  valueCount: number,
+) => {
+  if (!text.includes("?")) {
+    return text;
+  }
+
+  let parameterIndex = 0;
+  const converted = text.replace(/\?/g, () => {
+    parameterIndex += 1;
+    return `$${parameterIndex}`;
+  });
+
+  if (parameterIndex !== valueCount) {
+    throw new Error(
+      `Mismatched parameter count: expected ${parameterIndex}, received ${valueCount}.`,
+    );
+  }
+
+  return converted;
+};
+
 export const conn = {
   pool,
   query,
@@ -37,7 +60,12 @@ export const conn = {
     text: string,
     params: unknown[] = [],
   ): Promise<{ rows: T[] }> => {
-    const result = await query<T>(text, params);
+    const finalText = convertQuestionMarksToNumberedParameters(
+      text,
+      params.length,
+    );
+
+    const result = await query<T>(finalText, params);
     return { rows: result.rows };
   },
 };
