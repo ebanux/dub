@@ -41,8 +41,11 @@ export const GET = withPartnerProfile(
       timezone,
     });
 
-    const { dateFormat, dateIncrement, startFunction, formatString } =
+    const { dateFormat, dateTrunc, dateIncrement, startFunction, formatString } =
       sqlGranularityMap[granularity];
+
+    const timezoneToUse = timezone || "UTC";
+    const truncatedCreatedAt = Prisma.sql`date_trunc(${dateTrunc}, ("createdAt" AT TIME ZONE 'UTC') AT TIME ZONE ${timezoneToUse})`;
 
     const earnings = await prisma.$queryRaw<
       {
@@ -51,9 +54,7 @@ export const GET = withPartnerProfile(
       }[]
     >`
       SELECT
-        ${Prisma.sql`to_char(("createdAt" AT TIME ZONE 'UTC') AT TIME ZONE ${
-          timezone || "UTC"
-        }, ${dateFormat})`} AS start,
+        ${Prisma.sql`to_char(${truncatedCreatedAt}, ${dateFormat})`} AS start,
         ${
           groupBy
             ? groupBy === "type"
@@ -74,14 +75,14 @@ export const GET = withPartnerProfile(
         ${linkId ? Prisma.sql`AND "linkId" = ${linkId}` : Prisma.sql``}
         ${customerId ? Prisma.sql`AND "customerId" = ${customerId}` : Prisma.sql``}
         ${status ? Prisma.sql`AND "status" = ${status}` : Prisma.sql``}
-        GROUP BY start${
+        GROUP BY ${truncatedCreatedAt}${
           groupBy
             ? groupBy === "type"
               ? Prisma.sql`, "type"`
               : Prisma.sql`, "linkId"`
             : Prisma.sql``
         }
-      ORDER BY start ASC;
+      ORDER BY ${truncatedCreatedAt} ASC;
     `;
 
     const timeseries: {

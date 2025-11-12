@@ -75,17 +75,17 @@ export const GET = withAdmin(async ({ searchParams }) => {
     },
   });
 
-  const { dateFormat, dateIncrement, startFunction, formatString } =
+  const { dateFormat, dateTrunc, dateIncrement, startFunction, formatString } =
     sqlGranularityMap[granularity];
+
+  const truncatedCreatedAt = Prisma.sql`date_trunc(${dateTrunc}, ("createdAt" AT TIME ZONE 'UTC') AT TIME ZONE ${timezone})`;
 
   // Calculate timeseries data for payouts and fees
   const timeseriesData = await prisma.$queryRaw<
     { date: Date; payouts: number; fees: number; total: number }[]
   >`
     SELECT
-      ${Prisma.sql`to_char(("createdAt" AT TIME ZONE 'UTC') AT TIME ZONE ${
-        timezone
-      }, ${dateFormat})`} as date,
+      ${Prisma.sql`to_char(${truncatedCreatedAt}, ${dateFormat})`} as date,
       SUM("amount") as payouts,
       SUM("fee") as fees,
       SUM("total") as total
@@ -95,8 +95,8 @@ export const GET = withAdmin(async ({ searchParams }) => {
       AND "status" != 'failed'
       AND "createdAt" >= ${startDate}
       AND "createdAt" <= ${endDate}
-    GROUP BY date
-    ORDER BY date ASC;
+    GROUP BY ${truncatedCreatedAt}
+    ORDER BY ${truncatedCreatedAt} ASC;
   `;
 
   const formattedInvoices = invoices.map((invoice) => ({
