@@ -67,11 +67,11 @@ export const GET = withWorkspace(
           else null
         end as recruitedAt,
         -- Calculate ranking score components
-        CASE 
+        CASE
           WHEN metrics.lastConversionAt IS NULL THEN 0
-          WHEN DATEDIFF(NOW(), metrics.lastConversionAt) <= 7 THEN 100
-          WHEN DATEDIFF(NOW(), metrics.lastConversionAt) >= 180 THEN 5
-          ELSE GREATEST(5, 100 * EXP(-0.02 * DATEDIFF(NOW(), metrics.lastConversionAt)))
+          WHEN DATE_PART('day', NOW() - metrics.lastConversionAt) <= 7 THEN 100
+          WHEN DATE_PART('day', NOW() - metrics.lastConversionAt) >= 180 THEN 5
+          ELSE GREATEST(5, 100 * EXP(-0.02 * DATE_PART('day', NOW() - metrics.lastConversionAt)))
         END as recencyScore,
         CASE 
           WHEN COALESCE(metrics.conversionRate, 0) <= 0 THEN 0
@@ -100,11 +100,11 @@ export const GET = withWorkspace(
         END as commissionsScore,
         -- Calculate weighted overall score (0-100) with adjusted weights for high-volume partners
         (
-          (CASE 
+          (CASE
             WHEN metrics.lastConversionAt IS NULL THEN 0
-            WHEN DATEDIFF(NOW(), metrics.lastConversionAt) <= 7 THEN 100
-            WHEN DATEDIFF(NOW(), metrics.lastConversionAt) >= 180 THEN 5
-            ELSE GREATEST(5, 100 * EXP(-0.02 * DATEDIFF(NOW(), metrics.lastConversionAt)))
+            WHEN DATE_PART('day', NOW() - metrics.lastConversionAt) <= 7 THEN 100
+            WHEN DATE_PART('day', NOW() - metrics.lastConversionAt) >= 180 THEN 5
+            ELSE GREATEST(5, 100 * EXP(-0.02 * DATE_PART('day', NOW() - metrics.lastConversionAt)))
           END * 0.20) +
           (CASE 
             WHEN COALESCE(metrics.conversionRate, 0) <= 0 THEN 0
@@ -164,24 +164,24 @@ export const GET = withWorkspace(
       ) commissions ON commissions.partnerId = p.id
       -- Profile field lists
       LEFT JOIN (
-        SELECT partnerId, group_concat(industryInterest) AS industryInterests
+        SELECT partnerId, string_agg(industryInterest, ',') AS industryInterests
         FROM PartnerIndustryInterest
         GROUP BY partnerId
       ) industryInterests ON industryInterests.partnerId = p.id
       LEFT JOIN (
-        SELECT partnerId, group_concat(preferredEarningStructure) AS preferredEarningStructures
+        SELECT partnerId, string_agg(preferredEarningStructure, ',') AS preferredEarningStructures
         FROM PartnerPreferredEarningStructure
         GROUP BY partnerId
       ) preferredEarningStructures ON preferredEarningStructures.partnerId = p.id
       LEFT JOIN (
-        SELECT partnerId, group_concat(salesChannel) AS salesChannels
+        SELECT partnerId, string_agg(salesChannel, ',') AS salesChannels
         FROM PartnerSalesChannel
         GROUP BY partnerId
       ) salesChannels ON salesChannels.partnerId = p.id
-      WHERE 
+      WHERE
         p.discoverableAt IS NOT NULL
         AND dp.ignoredAt IS NULL
-        AND conversionRate < 1 /* Exclude partners with a conversion rate of 1 and above (unrealistic) */
+        AND COALESCE(metrics.conversionRate, 0) < 1 /* Exclude partners with a conversion rate of 1 and above (unrealistic) */
         ${partnerIds && partnerIds.length > 0 ? Prisma.sql`AND p.id IN (${Prisma.join(partnerIds)})` : Prisma.sql``}
         ${country ? Prisma.sql`AND p.country = ${country}` : Prisma.sql``}
         ${
