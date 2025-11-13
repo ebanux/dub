@@ -28,6 +28,14 @@ const expectedGroup: Partial<GroupProps> = {
   additionalLinks: expect.any(Array),
 };
 
+const toMixedCase = (value: string) =>
+  value
+    .split("")
+    .map((char, index) =>
+      index % 2 === 0 ? char.toLowerCase() : char.toUpperCase(),
+    )
+    .join("");
+
 describe.sequential("/groups/**", async () => {
   const h = new IntegrationHarness();
   const { http } = await h.init();
@@ -148,7 +156,7 @@ describe.sequential("/groups/**", async () => {
       await http.get<GroupExtendedProps[]>({
         path: "/groups",
         query: {
-          search: group.name.toLowerCase(),
+          search: toMixedCase(group.name),
         },
       });
 
@@ -159,7 +167,7 @@ describe.sequential("/groups/**", async () => {
       await http.get<GroupExtendedProps[]>({
         path: "/groups",
         query: {
-          search: group.slug.toUpperCase(),
+          search: toMixedCase(group.slug),
         },
       });
 
