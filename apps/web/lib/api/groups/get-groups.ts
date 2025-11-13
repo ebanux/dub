@@ -32,6 +32,14 @@ export async function getGroups(filters: GroupFilters) {
     includeExpandedFields,
   } = filters;
 
+  const normalizedSearch =
+    typeof search === "string" && search.trim().length > 0
+      ? search.trim().toLowerCase()
+      : undefined;
+  const searchPattern = normalizedSearch
+    ? `%${normalizedSearch}%`
+    : undefined;
+
   const groups = (await prisma.$queryRaw`
     SELECT
       pg.id,
@@ -80,8 +88,8 @@ export async function getGroups(filters: GroupFilters) {
     ${includeExpandedFields ? Prisma.sql`LEFT JOIN ProgramEnrollment pe ON pe.groupId = pg.id AND pe.status = 'approved'` : Prisma.sql``}
     WHERE pg.programId = ${programId}
     ${
-      search
-        ? Prisma.sql`AND (pg.name ILIKE ${`%${search}%`} OR pg.slug ILIKE ${`%${search}%`})`
+      searchPattern
+        ? Prisma.sql`AND (LOWER(pg.name) LIKE ${searchPattern} OR LOWER(pg.slug) LIKE ${searchPattern})`
         : Prisma.sql``
     }
     ${groupIds && groupIds.length > 0 ? Prisma.sql`AND pg.id IN (${Prisma.join(groupIds)})` : Prisma.sql``}
