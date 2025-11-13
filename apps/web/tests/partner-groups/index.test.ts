@@ -143,6 +143,30 @@ describe.sequential("/groups/**", async () => {
     });
   });
 
+  test("GET /groups?search= - performs case-insensitive search", async () => {
+    const { status: nameSearchStatus, data: nameSearchGroups } =
+      await http.get<GroupExtendedProps[]>({
+        path: "/groups",
+        query: {
+          search: group.name.toLowerCase(),
+        },
+      });
+
+    expect(nameSearchStatus).toEqual(200);
+    expect(nameSearchGroups.some((g) => g.id === group.id)).toBe(true);
+
+    const { status: slugSearchStatus, data: slugSearchGroups } =
+      await http.get<GroupExtendedProps[]>({
+        path: "/groups",
+        query: {
+          search: group.slug.toUpperCase(),
+        },
+      });
+
+    expect(slugSearchStatus).toEqual(200);
+    expect(slugSearchGroups.some((g) => g.id === group.id)).toBe(true);
+  });
+
   test("DELETE /groups/[groupId] - delete group", async () => {
     const { status, data } = await http.delete<{ id: string }>({
       path: `/groups/${group.id}`,

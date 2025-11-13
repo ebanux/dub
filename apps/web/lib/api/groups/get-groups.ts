@@ -79,7 +79,11 @@ export async function getGroups(filters: GroupFilters) {
     FROM PartnerGroup pg
     ${includeExpandedFields ? Prisma.sql`LEFT JOIN ProgramEnrollment pe ON pe.groupId = pg.id AND pe.status = 'approved'` : Prisma.sql``}
     WHERE pg.programId = ${programId}
-    ${search ? Prisma.sql`AND (pg.name LIKE ${`%${search}%`} OR pg.slug LIKE ${`%${search}%`})` : Prisma.sql``}
+    ${
+      search
+        ? Prisma.sql`AND (pg.name ILIKE ${`%${search}%`} OR pg.slug ILIKE ${`%${search}%`})`
+        : Prisma.sql``
+    }
     ${groupIds && groupIds.length > 0 ? Prisma.sql`AND pg.id IN (${Prisma.join(groupIds)})` : Prisma.sql``}
     GROUP BY pg.id
     ORDER BY ${Prisma.raw(sortBy === "createdAt" ? "pg.createdAt" : sortBy)} ${Prisma.raw(sortOrder)}, ${Prisma.raw(secondarySortColumnMap[sortBy])} ${Prisma.raw(sortOrder)}
