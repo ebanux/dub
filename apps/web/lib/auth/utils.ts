@@ -1,22 +1,45 @@
 import { getServerSession } from "next-auth/next";
+import { cookies, headers } from "next/headers";
 import { NextRequest } from "next/server";
 import { DubApiError } from "../api/errors";
+import {
+  COGNITO_JWT_COOKIE_NAME,
+  COGNITO_JWT_HEADER_NAME,
+  getCognitoSessionFromToken,
+} from "./cognito";
 import { authOptions } from "./options";
-
-export interface Session {
-  user: {
-    id: string;
-    name: string;
-    email: string;
-    image?: string;
-    isMachine: boolean;
-    defaultWorkspace?: string;
-    defaultPartnerId?: string;
-  };
-}
+import type { Session } from "./session-types";
+export type { Session } from "./session-types";
 
 export const getSession = async () => {
-  return getServerSession(authOptions) as Promise<Session>;
+  const nextAuthSession = (await getServerSession(authOptions)) as
+    | Session
+    | null;
+
+  if (nextAuthSession?.user?.id) {
+    return nextAuthSession;
+  }
+
+  try {
+    const headerStore = headers();
+    const cookieStore = cookies();
+    const token =
+      headerStore.get(COGNITO_JWT_HEADER_NAME) ||
+      cookieStore.get(COGNITO_JWT_COOKIE_NAME)?.value;
+
+    if (!token) {
+      return nextAuthSession as Session;
+    }
+
+    const cognitoSession = await getCognitoSessionFromToken(token);
+    if (cognitoSession) {
+      return cognitoSession.session;
+    }
+  } catch (error) {
+    console.error("Cognito session fallback failed", error);
+  }
+
+  return nextAuthSession as Session;
 };
 
 export const getAuthTokenOrThrow = (
