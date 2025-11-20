@@ -166,151 +166,163 @@ export const withWorkspace = (
         const isAnalytics =
           url.pathname.includes("/analytics") ||
           url.pathname.includes("/events");
+        const isSuperAdminApiKey =
+          Boolean(process.env.SUPER_ADMIN_API_KEY) &&
+          apiKey === process.env.SUPER_ADMIN_API_KEY;
 
         if (apiKey) {
-          const hashedKey = await hashToken(apiKey);
+          if (isSuperAdminApiKey) {
+            session = await buildSuperAdminSession({
+              workspaceId,
+              workspaceSlug,
+              searchParams,
+              headers: requestHeaders,
+            });
+          } else {
+            const hashedKey = await hashToken(apiKey);
 
-          const cachedToken = await tokenCache.get({
-            hashedKey,
-          });
+            const cachedToken = await tokenCache.get({
+              hashedKey,
+            });
 
-          if (!cachedToken) {
-            const prismaArgs = {
-              where: {
-                hashedKey,
-              },
-              select: {
-                ...(isRestrictedToken && {
-                  scopes: true,
-                  projectId: true,
-                  expires: true,
-                  installationId: true,
-                  project: {
-                    select: {
-                      plan: true,
+            if (!cachedToken) {
+              const prismaArgs = {
+                where: {
+                  hashedKey,
+                },
+                select: {
+                  ...(isRestrictedToken && {
+                    scopes: true,
+                    projectId: true,
+                    expires: true,
+                    installationId: true,
+                    project: {
+                      select: {
+                        plan: true,
+                      },
                     },
-                  },
-                }),
-                user: {
-                  select: {
-                    id: true,
-                    name: true,
-                    email: true,
-                    isMachine: true,
+                  }),
+                  user: {
+                    select: {
+                      id: true,
+                      name: true,
+                      email: true,
+                      isMachine: true,
+                    },
                   },
                 },
+              };
+
+              if (isRestrictedToken) {
+                token = await prisma.restrictedToken.findUnique(prismaArgs);
+              } else {
+                token = await prisma.token.findUnique(prismaArgs);
+              }
+            }
+
+            token = cachedToken || token;
+
+            if (!token || !token.user) {
+              throw new DubApiError({
+                code: "unauthorized",
+                message: "Unauthorized: Invalid API key.",
+              });
+            }
+
+            if (token.expires && token.expires < new Date()) {
+              throw new DubApiError({
+                code: "unauthorized",
+                message: "Unauthorized: Access token expired.",
+              });
+            }
+
+            if (!cachedToken) {
+              waitUntil(
+                tokenCache.set({
+                  hashedKey,
+                  token,
+                }),
+              );
+            }
+
+            // Rate limit checks for API keys
+            let limit = 0;
+            let interval: `${number} s` | `${number} m` =
+              isAnalytics && token.projectId !== "cluh0o00y000211ly4lbh5zm4" // temporary exclusion
+                ? "1 s"
+                : "1 m";
+
+            const planLimit = getRatelimitForPlan(token.project?.plan || "free");
+            limit =
+              planLimit.limits[
+                isAnalytics && token.projectId !== "cluh0o00y000211ly4lbh5zm4" // temporary exclusion
+                  ? "analyticsApi"
+                  : "api"
+              ];
+
+            const { success, headers } = await rateLimitRequest({
+              identifier: `workspace:ratelimit:${hashedKey}`,
+              requests: limit,
+              interval,
+            });
+
+            if (headers) {
+              for (const [key, value] of Object.entries(headers)) {
+                responseHeaders.set(key, value);
+              }
+            }
+
+            if (!success) {
+              throw new DubApiError({
+                code: "rate_limit_exceeded",
+                message: "Too many requests.",
+              });
+            }
+
+            // Find workspaceId if it's a restricted token
+            if (isRestrictedToken && token?.projectId) {
+              workspaceId = token.projectId;
+            }
+
+            waitUntil(
+              // update last used time for the token (only once every minute)
+              (async () => {
+                try {
+                  const { success } = await ratelimit(1, "1 m").limit(
+                    `last-used-${hashedKey}`,
+                  );
+
+                  if (success) {
+                    const prismaArgs = {
+                      where: {
+                        hashedKey,
+                      },
+                      data: {
+                        lastUsed: new Date(),
+                      },
+                    };
+
+                    if (isRestrictedToken) {
+                      await prisma.restrictedToken.update(prismaArgs);
+                    } else {
+                      await prisma.token.update(prismaArgs);
+                    }
+                  }
+                } catch (error) {
+                  console.error(error);
+                }
+              })(),
+            );
+
+            session = {
+              user: {
+                id: token.user.id,
+                name: token.user.name || "",
+                email: token.user.email || "",
+                isMachine: token.user.isMachine,
               },
             };
-
-            if (isRestrictedToken) {
-              token = await prisma.restrictedToken.findUnique(prismaArgs);
-            } else {
-              token = await prisma.token.findUnique(prismaArgs);
-            }
           }
-
-          token = cachedToken || token;
-
-          if (!token || !token.user) {
-            throw new DubApiError({
-              code: "unauthorized",
-              message: "Unauthorized: Invalid API key.",
-            });
-          }
-
-          if (token.expires && token.expires < new Date()) {
-            throw new DubApiError({
-              code: "unauthorized",
-              message: "Unauthorized: Access token expired.",
-            });
-          }
-
-          if (!cachedToken) {
-            waitUntil(
-              tokenCache.set({
-                hashedKey,
-                token,
-              }),
-            );
-          }
-
-          // Rate limit checks for API keys
-          let limit = 0;
-          let interval: `${number} s` | `${number} m` =
-            isAnalytics && token.projectId !== "cluh0o00y000211ly4lbh5zm4" // temporary exclusion
-              ? "1 s"
-              : "1 m";
-
-          const planLimit = getRatelimitForPlan(token.project?.plan || "free");
-          limit =
-            planLimit.limits[
-              isAnalytics && token.projectId !== "cluh0o00y000211ly4lbh5zm4" // temporary exclusion
-                ? "analyticsApi"
-                : "api"
-            ];
-
-          const { success, headers } = await rateLimitRequest({
-            identifier: `workspace:ratelimit:${hashedKey}`,
-            requests: limit,
-            interval,
-          });
-
-          if (headers) {
-            for (const [key, value] of Object.entries(headers)) {
-              responseHeaders.set(key, value);
-            }
-          }
-
-          if (!success) {
-            throw new DubApiError({
-              code: "rate_limit_exceeded",
-              message: "Too many requests.",
-            });
-          }
-
-          // Find workspaceId if it's a restricted token
-          if (isRestrictedToken && token?.projectId) {
-            workspaceId = token.projectId;
-          }
-
-          waitUntil(
-            // update last used time for the token (only once every minute)
-            (async () => {
-              try {
-                const { success } = await ratelimit(1, "1 m").limit(
-                  `last-used-${hashedKey}`,
-                );
-
-                if (success) {
-                  const prismaArgs = {
-                    where: {
-                      hashedKey,
-                    },
-                    data: {
-                      lastUsed: new Date(),
-                    },
-                  };
-
-                  if (isRestrictedToken) {
-                    await prisma.restrictedToken.update(prismaArgs);
-                  } else {
-                    await prisma.token.update(prismaArgs);
-                  }
-                }
-              } catch (error) {
-                console.error(error);
-              }
-            })(),
-          );
-
-          session = {
-            user: {
-              id: token.user.id,
-              name: token.user.name || "",
-              email: token.user.email || "",
-              isMachine: token.user.isMachine,
-            },
-          };
         } else {
           session = await getSession();
 
@@ -492,3 +504,117 @@ export const withWorkspace = (
     },
   );
 };
+
+const SUPER_ADMIN_IMPERSONATE_HEADERS = {
+  userId: "x-dub-impersonate-user-id",
+  email: "x-dub-impersonate-user-email",
+} as const;
+
+async function buildSuperAdminSession({
+  workspaceId,
+  workspaceSlug,
+  searchParams,
+  headers,
+}: {
+  workspaceId?: string;
+  workspaceSlug?: string;
+  searchParams: Record<string, string>;
+  headers: Headers;
+}): Promise<Session> {
+  const impersonateUserId =
+    searchParams.impersonateUserId ||
+    headers.get(SUPER_ADMIN_IMPERSONATE_HEADERS.userId) ||
+    undefined;
+  const impersonateUserEmail =
+    searchParams.impersonateUserEmail ||
+    headers.get(SUPER_ADMIN_IMPERSONATE_HEADERS.email) ||
+    undefined;
+
+  const impersonatedUser = await resolveImpersonatedUser({
+    workspaceId,
+    workspaceSlug,
+    impersonateUserId,
+    impersonateUserEmail,
+  });
+
+  if (!impersonatedUser) {
+    throw new DubApiError({
+      code: "not_found",
+      message:
+        "Unable to impersonate user. Provide `impersonateUserId`, `impersonateUserEmail`, or a workspace that has at least one owner.",
+    });
+  }
+
+  return {
+    user: {
+      id: impersonatedUser.id,
+      name: impersonatedUser.name || "",
+      email: impersonatedUser.email || "",
+      isMachine: impersonatedUser.isMachine,
+    },
+  };
+}
+
+async function resolveImpersonatedUser({
+  workspaceId,
+  workspaceSlug,
+  impersonateUserId,
+  impersonateUserEmail,
+}: {
+  workspaceId?: string;
+  workspaceSlug?: string;
+  impersonateUserId?: string;
+  impersonateUserEmail?: string;
+}) {
+  const userSelect = {
+    id: true,
+    name: true,
+    email: true,
+    isMachine: true,
+  } as const;
+
+  if (impersonateUserId) {
+    return await prisma.user.findUnique({
+      where: { id: impersonateUserId },
+      select: userSelect,
+    });
+  }
+
+  if (impersonateUserEmail) {
+    return await prisma.user.findUnique({
+      where: { email: impersonateUserEmail },
+      select: userSelect,
+    });
+  }
+
+  const workspaceWhere = workspaceId
+    ? { id: workspaceId }
+    : workspaceSlug
+      ? { slug: workspaceSlug }
+      : null;
+
+  if (!workspaceWhere) {
+    return null;
+  }
+
+  const workspaceOwner = await prisma.project.findUnique({
+    where: workspaceWhere,
+    select: {
+      users: {
+        where: {
+          role: "owner",
+        },
+        orderBy: {
+          createdAt: "asc",
+        },
+        select: {
+          user: {
+            select: userSelect,
+          },
+        },
+      },
+    },
+  });
+
+  return workspaceOwner?.users[0]?.user || null;
+}
