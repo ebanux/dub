@@ -126,6 +126,7 @@ const ADVANCED_PRICE_IDS = [
   "price_1R3j0qAlJJEpqkPVkfGNXRwb", // monthly
   "price_1R8XztAlJJEpqkPVnHmIU2tf", // yearly (test),
   "price_1R7ofzAlJJEpqkPV0L2TwyJo", // monthly (test),
+  "price_1SV6wjCHh3XhfaZrzYbC1byO", // (sandbox/test)
   ...Object.values(ADVANCED_TIER_PRICE_IDS).flat(),
 ];
 
