@@ -73,7 +73,7 @@ const NEW_PRO_PRICE_IDS = [
   "price_1R8XtyAlJJEpqkPV5WZ4c0jF", //  yearly
   "price_1R8XtEAlJJEpqkPV4opVvVPq", // monthly
   "price_1R8XxZAlJJEpqkPVqGi0wOqD", // yearly (test),
-  "price_1R7oeBAlJJEpqkPVh6q5q3h8", // monthly (test),
+  "price_1SUHEaCHh3XhfaZrISMz1L8i", // monthly (test),
   ...Object.values(PRO_TIER_PRICE_IDS).flat(),
 ];
 
@@ -124,7 +124,7 @@ const ADVANCED_PRICE_IDS = [
   "price_1R8Xw4AlJJEpqkPV6nwdink9", //  yearly
   "price_1R3j0qAlJJEpqkPVkfGNXRwb", // monthly
   "price_1R8XztAlJJEpqkPVnHmIU2tf", // yearly (test),
-  "price_1R7ofzAlJJEpqkPV0L2TwyJo", // monthly (test),
+  "price_1SV6wjCHh3XhfaZrzYbC1byO", // monthly (test),
   ...Object.values(ADVANCED_TIER_PRICE_IDS).flat(),
 ];
 
