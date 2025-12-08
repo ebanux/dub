@@ -1,5 +1,6 @@
 import { isBlacklistedEmail } from "@/lib/edge-config";
 import { jackson } from "@/lib/jackson";
+import { QRLynkAuthProvider } from "@/lib/qrlynk/auth-provider";
 import { isStored, storage } from "@/lib/storage";
 import { UserProps } from "@/lib/types";
 import { ratelimit } from "@/lib/upstash";
@@ -29,7 +30,12 @@ import {
 import { validatePassword } from "./password";
 import { trackDubLead } from "./track-dub-lead";
 
-const VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL;
+const appDomain = process.env.NEXT_PUBLIC_APP_DOMAIN || "";
+const cookiesDomain = appDomain
+  ? `.${appDomain.split(".").slice(-2).join(".").replace(/:.*/, "")}`
+  : undefined;
+const secureCookies =
+  !!process.env.VERCEL_URL || process.env.NEXTAUTH_URL?.startsWith("https://");
 
 const CustomPrismaAdapter = (p: PrismaClient) => {
   return {
@@ -47,6 +53,7 @@ const CustomPrismaAdapter = (p: PrismaClient) => {
 
 export const authOptions: NextAuthOptions = {
   providers: [
+    QRLynkAuthProvider(),
     EmailProvider({
       sendVerificationRequest({ identifier, url }) {
         if (process.env.NODE_ENV === "development") {
@@ -172,9 +179,7 @@ export const authOptions: NextAuthOptions = {
             data: {
               id: createId({ prefix: "user_" }),
               email: userInfo.email,
-              name: `${userInfo.firstName || ""} ${
-                userInfo.lastName || ""
-              }`.trim(),
+              name: `${userInfo.firstName || ""} ${userInfo.lastName || ""}`.trim(),
             },
           });
         }
@@ -319,16 +324,14 @@ export const authOptions: NextAuthOptions = {
   session: { strategy: "jwt" },
   cookies: {
     sessionToken: {
-      name: `${VERCEL_DEPLOYMENT ? "__Secure-" : ""}next-auth.session-token`,
+      name: `${secureCookies ? "__Secure-" : ""}next-auth.session-token`,
       options: {
         httpOnly: true,
         sameSite: "lax",
         path: "/",
         // When working on localhost, the cookie domain must be omitted entirely (https://stackoverflow.com/a/1188145)
-        domain: VERCEL_DEPLOYMENT
-          ? `.${process.env.NEXT_PUBLIC_APP_DOMAIN}`
-          : undefined,
-        secure: VERCEL_DEPLOYMENT,
+        domain: cookiesDomain,
+        secure: secureCookies,
       },
     },
   },
@@ -338,8 +341,6 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     signIn: async ({ user, account, profile }) => {
-      console.log({ user, account, profile });
-
       if (!user.email || (await isBlacklistedEmail(user.email))) {
         return false;
       }

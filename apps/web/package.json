@@ -68,6 +68,7 @@
     "@visx/shape": "^2.12.2",
     "@visx/text": "^3.3.0",
     "ai": "^4.0.30",
+    "aws-amplify": "^6.15.8",
     "aws4fetch": "^1.0.19",
     "base-x": "^5.0.0",
     "bcryptjs": "^2.4.3",
