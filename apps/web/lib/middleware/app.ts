@@ -19,6 +19,10 @@ export async function AppMiddleware(req: NextRequest) {
     return EmbedMiddleware(req);
   }
 
+  if (path === '/logout') {
+    return NextResponse.rewrite(new URL(`/app.dub.co${fullPath}`, req.url));
+  }
+
   const user = await getUserViaToken(req);
   const isWorkspaceInvite =
     req.nextUrl.searchParams.get("invite") || path.startsWith("/invites/");
