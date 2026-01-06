@@ -1,7 +1,6 @@
 import {
   BOUNTY_DESCRIPTION_MAX_LENGTH,
   BOUNTY_MAX_SUBMISSION_REJECTION_NOTE_LENGTH,
-  BOUNTY_SUBMISSION_REQUIREMENTS,
 } from "@/lib/constants/bounties";
 import {
   BountyPerformanceScope,
@@ -18,10 +17,25 @@ import { UserSchema } from "./users";
 import { parseDateSchema } from "./utils";
 import { workflowConditionSchema } from "./workflows";
 
-export const submissionRequirementsSchema = z
-  .array(z.enum(BOUNTY_SUBMISSION_REQUIREMENTS))
-  .min(0)
-  .max(2);
+// Object format with image and url keys
+export const submissionRequirementsSchema = z.object({
+  image: z
+    .object({
+      max: z.number().int().positive().optional(),
+    })
+    .optional(),
+  url: z
+    .object({
+      max: z.number().int().positive().optional(),
+      domains: z.array(z.string()).optional(),
+    })
+    .optional(),
+});
+
+// Type exports for TypeScript
+export type SubmissionRequirements = z.infer<
+  typeof submissionRequirementsSchema
+>;
 
 export const createBountySchema = z.object({
   name: z
@@ -160,9 +174,10 @@ export const rejectBountySubmissionSchema = z.object({
 
 export const getBountySubmissionsQuerySchema = z
   .object({
-    sortBy: z.enum(["completedAt", "performanceCount"]).default("completedAt"),
-    sortOrder: z.enum(["asc", "desc"]).default("asc"),
     status: z.nativeEnum(BountySubmissionStatus).optional(),
     groupId: z.string().optional(),
+    partnerId: z.string().optional(),
+    sortBy: z.enum(["completedAt", "performanceCount"]).default("completedAt"),
+    sortOrder: z.enum(["asc", "desc"]).default("asc"),
   })
   .merge(getPaginationQuerySchema({ pageSize: 100 }));

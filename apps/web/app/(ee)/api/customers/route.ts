@@ -1,6 +1,7 @@
 import { createId } from "@/lib/api/create-id";
 import { transformCustomer } from "@/lib/api/customers/transform-customer";
 import { DubApiError } from "@/lib/api/errors";
+import { getDefaultProgramIdOrThrow } from "@/lib/api/programs/get-default-program-id-or-throw";
 import { parseRequestBody } from "@/lib/api/utils";
 import { withWorkspace } from "@/lib/auth";
 import { generateRandomName } from "@/lib/names";
@@ -13,7 +14,6 @@ import {
 } from "@/lib/zod/schemas/customers";
 import { DiscountSchemaWithDeprecatedFields } from "@/lib/zod/schemas/discount";
 import { prisma, sanitizeFullTextSearch } from "@dub/prisma";
-import { nanoid, R2_URL } from "@dub/utils";
 import {
   Customer,
   Discount,
@@ -21,7 +21,8 @@ import {
   Partner,
   Program,
   ProgramEnrollment,
-} from "@prisma/client";
+} from "@dub/prisma/client";
+import { nanoid, R2_URL } from "@dub/utils";
 import { waitUntil } from "@vercel/functions";
 import { NextResponse } from "next/server";
 import { z } from "zod";
@@ -39,12 +40,14 @@ interface CustomerResponse extends Customer {
 // GET /api/customers – Get all customers
 export const GET = withWorkspace(
   async ({ workspace, searchParams }) => {
-    const {
+    let {
       email,
       externalId,
       search,
       country,
       linkId,
+      programId,
+      partnerId,
       includeExpandedFields,
       page,
       pageSize,
@@ -53,13 +56,23 @@ export const GET = withWorkspace(
       sortOrder,
     } = getCustomersQuerySchemaExtended.parse(searchParams);
 
-    const customers = (await prisma.customer.findMany({
+    if (programId || partnerId) {
+      programId = getDefaultProgramIdOrThrow(workspace);
+    }
+
+    const customers = await prisma.customer.findMany({
       where: {
         ...(customerIds
           ? {
               id: { in: customerIds },
             }
           : {}),
+        ...(programId && {
+          programId,
+        }),
+        ...(partnerId && {
+          partnerId,
+        }),
         projectId: workspace.id,
         ...(email
           ? { email }
@@ -108,7 +121,7 @@ export const GET = withWorkspace(
             },
           }
         : {}),
-    })) as CustomerResponse[];
+    });
 
     const responseSchema = includeExpandedFields
       ? CustomerEnrichedSchema.merge(
@@ -139,7 +152,7 @@ export const GET = withWorkspace(
 // POST /api/customers – Create a customer
 export const POST = withWorkspace(
   async ({ req, workspace }) => {
-    const { email, name, avatar, externalId, stripeCustomerId } =
+    const { email, name, avatar, externalId, stripeCustomerId, country } =
       createCustomerBodySchema.parse(await parseRequestBody(req));
 
     const customerId = createId({ prefix: "cus_" });
@@ -158,6 +171,7 @@ export const POST = withWorkspace(
           avatar: finalCustomerAvatar,
           externalId,
           stripeCustomerId,
+          country,
           projectId: workspace.id,
           projectConnectId: workspace.stripeConnectId,
         },

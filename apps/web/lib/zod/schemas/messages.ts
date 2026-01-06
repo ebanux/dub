@@ -1,4 +1,4 @@
-import { MessageType } from "@prisma/client";
+import { MessageType } from "@dub/prisma/client";
 import { z } from "zod";
 import { PartnerSchema } from "./partners";
 import { ProgramSchema } from "./programs";
@@ -83,14 +83,4 @@ export const getProgramMessagesQuerySchema = z.object({
 export const messageProgramSchema = z.object({
   programSlug: z.string(),
   text: messageTextSchema.max(MAX_MESSAGE_LENGTH),
-  createdAt: z.coerce
-    .date()
-    .refine(
-      (date) =>
-        date.getTime() <= Date.now() &&
-        date.getTime() >= Date.now() - 1000 * 60,
-      {
-        message: "Message timestamp must be within the last 60 seconds",
-      },
-    ),
 });

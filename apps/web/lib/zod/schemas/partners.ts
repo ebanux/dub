@@ -14,6 +14,7 @@ import { analyticsResponse } from "./analytics-response";
 import { createLinkBodySchema } from "./links";
 import {
   base64ImageSchema,
+  booleanQuerySchema,
   getPaginationQuerySchema,
   publicHostedImageSchema,
   storedR2ImageUrlSchema,
@@ -22,6 +23,12 @@ import { ProgramEnrollmentSchema } from "./programs";
 import { parseUrlSchema } from "./utils";
 
 export const PARTNERS_MAX_PAGE_SIZE = 100;
+
+export const INACTIVE_ENROLLMENT_STATUSES: ProgramEnrollmentStatus[] = [
+  "banned",
+  "deactivated",
+  "rejected",
+];
 
 export const exportPartnerColumns = [
   { id: "id", label: "ID", default: true },
@@ -171,6 +178,7 @@ export const getPartnersQuerySchemaExtended = getPartnersQuerySchema.merge(
       .transform((v) => (Array.isArray(v) ? v : v.split(",")))
       .optional(),
     groupId: z.string().optional(),
+    includeOnlinePresenceVerification: booleanQuerySchema.optional(),
   }),
 );
 
@@ -336,6 +344,20 @@ export const PartnerSchema = z
 export const PartnerWithProfileSchema =
   PartnerSchema.merge(PartnerProfileSchema);
 
+export const PartnerRewindSchema = z.object({
+  id: z.string(),
+  partnerId: z.string(),
+  year: z.number(),
+  totalClicks: z.number().default(0),
+  totalLeads: z.number().default(0),
+  totalRevenue: z.number().default(0),
+  totalEarnings: z.number().default(0),
+  clicksPercentile: z.number().default(0),
+  leadsPercentile: z.number().default(0),
+  revenuePercentile: z.number().default(0),
+  earningsPercentile: z.number().default(0),
+});
+
 // Used externally by GET+POST /api/partners and partner.enrolled webhook
 export const EnrolledPartnerSchema = PartnerSchema.pick({
   id: true,
@@ -356,6 +378,7 @@ export const EnrolledPartnerSchema = PartnerSchema.pick({
       rewards: true,
       discount: true,
       group: true,
+      customerDataSharingEnabledAt: true,
     }),
   )
   .extend({
@@ -478,12 +501,6 @@ export const LeaderboardPartnerSchema = z.object({
   totalCommissions: z.number().default(0),
 });
 
-export const getPartnerCustomersQuerySchema = z
-  .object({
-    search: z.string().optional(),
-  })
-  .merge(getPaginationQuerySchema({ pageSize: 100 }));
-
 export const createPartnerSchema = z.object({
   name: z
     .string()
@@ -545,13 +562,25 @@ export const createPartnerSchema = z.object({
       url: true,
       domain: true,
       key: true,
+      // default programId / partnerId fields
+      programId: true,
+      partnerId: true,
+      // partner links always track conversions
+      trackConversion: true,
+      // folderId is set to the program's defaultFolderId
+      folderId: true,
+      // UTM params are derived from the partner's group settings
+      utm_source: true,
+      utm_medium: true,
+      utm_campaign: true,
+      utm_term: true,
+      utm_content: true,
+      ref: true,
+      // additional unsupported fields
       publicStats: true,
       tagId: true,
       geo: true,
-      programId: true,
-      partnerId: true,
       webhookIds: true,
-      trackConversion: true,
     })
     .partial()
     .optional()
@@ -747,6 +776,13 @@ export const bulkRejectPartnersSchema = z.object({
     .max(100)
     .min(1)
     .transform((v) => [...new Set(v)]),
+  reportFraud: z
+    .boolean()
+    .optional()
+    .default(false)
+    .describe(
+      "Whether to report these partners for suspected fraud to help keep the network safe.",
+    ),
 });
 
 export const retrievePartnerLinksSchema = partnerIdTenantIdSchema;
@@ -804,4 +840,10 @@ export const partnerPayoutSettingsSchema = z.object({
   companyName: z.string().max(190).trim().nullish(),
   address: z.string().max(500).trim().nullish(),
   taxId: z.string().max(100).trim().nullish(),
+});
+
+export const partnerCrossProgramSummarySchema = z.object({
+  totalPrograms: z.number(),
+  trustedPrograms: z.number(),
+  removedPrograms: z.number(),
 });
