@@ -48,7 +48,7 @@ export const awsSetup = () => {
       path: '/',
       expires: 30, // 'expires' en días
       sameSite: 'lax',
-      secure: process.env.NODE_ENV === 'production',
+      secure: process.env.NODE_ENV === 'production' || baseUrl.startsWith('https://'),
     }),
   );
 };
