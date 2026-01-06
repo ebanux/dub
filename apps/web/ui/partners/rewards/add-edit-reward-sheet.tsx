@@ -504,7 +504,7 @@ function RewardSheetContent({
                             className="sm:w-80"
                             maxLength={REWARD_DESCRIPTION_MAX_LENGTH}
                           />
-                        </InlineBadgePopover>
+                        </InlineBadgePopover>{" "}
                         with the tooltip{" "}
                         <InlineBadgePopover
                           text={tooltipDescription || "Reward tooltip"}
@@ -528,20 +528,19 @@ function RewardSheetContent({
                         variant="outline"
                         className="size-6 shrink-0 p-0"
                         icon={<X className="size-3" strokeWidth={2} />}
-                        onClick={() =>
-                          setValue("description", null, { shouldDirty: true })
-                        }
+                        onClick={() => {
+                          setValue("description", null, { shouldDirty: true });
+                          setValue("tooltipDescription", null, {
+                            shouldDirty: true,
+                          });
+                        }}
                       />
                     </div>
                   </div>
                 </motion.div>
               </div>
             }
-            content={
-              selectedEvent === "click" ? undefined : (
-                <RewardsLogic isDefaultReward={false} />
-              )
-            }
+            content={<RewardsLogic isDefaultReward={false} />}
           />
 
           <VerticalLine />

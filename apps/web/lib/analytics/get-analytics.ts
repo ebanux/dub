@@ -1,8 +1,8 @@
 import { combineTagIds } from "@/lib/api/tags/combine-tag-ids";
 import { tb } from "@/lib/tinybird";
 import { prisma } from "@dub/prisma";
+import { FolderAccessLevel } from "@dub/prisma/client";
 import { linkConstructor, punyEncode } from "@dub/utils";
-import { FolderAccessLevel } from "@prisma/client";
 import { decodeKeyIfCaseSensitive } from "../api/links/case-sensitivity";
 import { conn } from "../planetscale";
 import z from "../zod";
@@ -14,6 +14,7 @@ import {
 } from "./constants";
 import { queryParser } from "./query-parser";
 import { AnalyticsFilters } from "./types";
+import { formatUTCDateTimeClickhouse } from "./utils/format-utc-datetime-clickhouse";
 import { getStartEndDates } from "./utils/get-start-end-dates";
 
 // Fetch data for /api/analytics
@@ -148,8 +149,8 @@ export const getAnalytics = async (params: AnalyticsFilters) => {
     workspaceId,
     tagIds,
     trigger,
-    start: startDate.toISOString().replace("T", " ").replace("Z", ""),
-    end: endDate.toISOString().replace("T", " ").replace("Z", ""),
+    start: formatUTCDateTimeClickhouse(startDate),
+    end: formatUTCDateTimeClickhouse(endDate),
     granularity,
     timezone,
     country,

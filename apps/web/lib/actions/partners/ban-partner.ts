@@ -2,15 +2,18 @@
 
 import { recordAuditLog } from "@/lib/api/audit-logs/record-audit-log";
 import { DubApiError } from "@/lib/api/errors";
-import { resolveFraudEvents } from "@/lib/api/fraud/resolve-fraud-events";
+import { resolveFraudGroups } from "@/lib/api/fraud/resolve-fraud-groups";
 import { getDefaultProgramIdOrThrow } from "@/lib/api/programs/get-default-program-id-or-throw";
 import { getProgramEnrollmentOrThrow } from "@/lib/api/programs/get-program-enrollment-or-throw";
 import { qstash } from "@/lib/cron";
 import { UserProps, WorkspaceProps } from "@/lib/types";
 import { banPartnerSchema } from "@/lib/zod/schemas/partners";
 import { prisma } from "@dub/prisma";
+import {
+  PartnerBannedReason,
+  ProgramEnrollmentStatus,
+} from "@dub/prisma/client";
 import { APP_DOMAIN_WITH_NGROK } from "@dub/utils";
-import { PartnerBannedReason, ProgramEnrollmentStatus } from "@prisma/client";
 import { waitUntil } from "@vercel/functions";
 import { authActionClient } from "../safe-action";
 
@@ -54,6 +57,13 @@ export const banPartner = async ({
     },
   });
 
+  if (programEnrollment.status === "pending") {
+    throw new DubApiError({
+      code: "bad_request",
+      message: "This partner is not approved yet to be banned.",
+    });
+  }
+
   if (programEnrollment.status === "banned") {
     throw new DubApiError({
       code: "bad_request",
@@ -82,7 +92,7 @@ export const banPartner = async ({
   });
 
   // Automatically resolve all pending fraud events for this partner in the current program
-  await resolveFraudEvents({
+  await resolveFraudGroups({
     where: commonWhere,
     userId: user.id,
     resolutionReason: "Resolved automatically because the partner was banned.",
@@ -112,7 +122,6 @@ export const banPartner = async ({
         body: {
           programId,
           partnerId,
-          userId: user.id,
         },
       }),
     ]),

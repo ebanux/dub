@@ -25,6 +25,7 @@ if (process.env.NODE_ENV === 'development') {
 module.exports = {
   reactStrictMode: false,
   transpilePackages: [
+    "prettier",
     "shiki",
     "@dub/prisma",
     "@dub/email",

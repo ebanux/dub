@@ -45,6 +45,9 @@ const CustomPrismaAdapter = (p: PrismaClient) => {
         data: {
           ...data,
           id: createId({ prefix: "user_" }),
+          notificationPreferences: {
+            create: {},
+          },
         },
       });
     },
@@ -111,6 +114,9 @@ export const authOptions: NextAuthOptions = {
               name: `${profile.firstName || ""} ${
                 profile.lastName || ""
               }`.trim(),
+              notificationPreferences: {
+                create: {},
+              },
             },
           });
         }
@@ -180,6 +186,9 @@ export const authOptions: NextAuthOptions = {
               id: createId({ prefix: "user_" }),
               email: userInfo.email,
               name: `${userInfo.firstName || ""} ${userInfo.lastName || ""}`.trim(),
+              notificationPreferences: {
+                create: {},
+              },
             },
           });
         }

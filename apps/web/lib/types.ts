@@ -9,6 +9,8 @@ import { DirectorySyncProviders } from "@boxyhq/saml-jackson";
 import {
   CommissionStatus,
   FolderUserRole,
+  FraudEvent,
+  FraudEventGroup,
   FraudRuleType,
   Link,
   PartnerGroup,
@@ -59,7 +61,7 @@ import { DiscountCodeSchema, DiscountSchema } from "./zod/schemas/discount";
 import { EmailDomainSchema } from "./zod/schemas/email-domains";
 import { FolderSchema } from "./zod/schemas/folders";
 import {
-  groupedFraudEventSchema,
+  fraudGroupSchema,
   fraudRuleSchema,
   updateFraudRuleSettingsSchema,
 } from "./zod/schemas/fraud";
@@ -92,6 +94,7 @@ import {
   createPartnerSchema,
   EnrolledPartnerSchema,
   EnrolledPartnerSchemaExtended,
+  PartnerRewindSchema,
   PartnerSchema,
   WebhookPartnerSchema,
 } from "./zod/schemas/partners";
@@ -106,6 +109,10 @@ import {
 } from "./zod/schemas/program-application-form";
 import { programInviteEmailDataSchema } from "./zod/schemas/program-invite-email";
 import { programLanderSchema } from "./zod/schemas/program-lander";
+import {
+  NetworkProgramExtendedSchema,
+  NetworkProgramSchema,
+} from "./zod/schemas/program-network";
 import { programDataSchema } from "./zod/schemas/program-onboarding";
 import {
   PartnerCommentSchema,
@@ -181,7 +188,10 @@ export interface RedisLinkProps {
   webhookIds?: string[];
   programId?: string;
   partnerId?: string;
-  partner?: Pick<PartnerProps, "id" | "name" | "image">;
+  partner?: Pick<PartnerProps, "id" | "name" | "image"> & {
+    groupId?: string | null;
+    tenantId?: string | null;
+  };
   discount?: Pick<
     DiscountProps,
     "id" | "amount" | "type" | "maxDuration" | "couponId" | "couponTestId"
@@ -449,6 +459,8 @@ export type PartnerProps = z.infer<typeof PartnerSchema> & {
   userId: string;
 };
 
+export type PartnerRewindProps = z.infer<typeof PartnerRewindSchema>;
+
 export type PartnerUserProps = z.infer<typeof partnerUserSchema>;
 export type PartnerProfileCustomerProps = z.infer<
   typeof PartnerProfileCustomerSchema
@@ -462,6 +474,12 @@ export type NetworkPartnerProps = z.infer<typeof NetworkPartnerSchema>;
 
 export type PartnerConversionScore = z.infer<
   typeof PartnerConversionScoreSchema
+>;
+
+export type NetworkProgramProps = z.infer<typeof NetworkProgramSchema>;
+
+export type NetworkProgramExtendedProps = z.infer<
+  typeof NetworkProgramExtendedSchema
 >;
 
 export type EnrolledPartnerExtendedProps = z.infer<
@@ -673,7 +691,7 @@ export type WorkflowAttribute = (typeof WORKFLOW_ATTRIBUTES)[number];
 
 export type EmailDomainProps = z.infer<typeof EmailDomainSchema>;
 
-export type fraudEventGroupProps = z.infer<typeof groupedFraudEventSchema>;
+export type FraudGroupProps = z.infer<typeof fraudGroupSchema>;
 
 export type ExtendedFraudRuleType =
   | FraudRuleType
@@ -708,12 +726,22 @@ export type UpdateFraudRuleSettings = z.infer<
   typeof updateFraudRuleSettingsSchema
 >;
 
-export interface FraudEventsCountByPartner {
+export interface FraudGroupCountByPartner {
   partnerId: string;
   _count: number;
 }
 
-export interface FraudEventsCountByType {
+export interface FraudGroupCountByType {
   type: FraudRuleType;
   _count: number;
 }
+
+export type CreateFraudEventInput = Pick<
+  FraudEventGroup,
+  "programId" | "partnerId" | "type"
+> &
+  Partial<
+    Pick<FraudEvent, "linkId" | "eventId" | "customerId" | "sourceProgramId">
+  > & {
+    metadata?: Record<string, unknown> | null;
+  };

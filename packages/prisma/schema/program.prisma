@@ -31,9 +31,10 @@ model Program {
   defaultGroupId     String
   name               String
   slug               String            @unique
-  domain             String?
+  domain             String?           @unique
   url                String?
-  logo               String? // TODO: remove after we refactor all program.logo fields to use group.logo instead
+  logo               String?
+  description        String?           @db.Text
   primaryRewardEvent EventType         @default(sale)
   minPayoutAmount    Int               @default(0) // Default minimum payout amount of $0
   payoutMode         ProgramPayoutMode @default(internal)
@@ -51,18 +52,18 @@ model Program {
   updatedAt               DateTime  @updatedAt
   startedAt               DateTime?
 
-  // DEPRECATED FIELDS: TODO – remove after migration
-  wordmark                     String?
-  brandColor                   String?
-  holdingPeriodDays            Int       @default(0)
-  autoApprovePartnersEnabledAt DateTime?
+  addedToMarketplaceAt    DateTime?
+  featuredOnMarketplaceAt DateTime?
+  marketplaceHeaderImage  String?
 
   workspace                Project                   @relation(fields: [workspaceId], references: [id])
+  customDomain             Domain?                   @relation(fields: [domain], references: [slug])
   partners                 ProgramEnrollment[]
   payouts                  Payout[]
   invoices                 Invoice[]
   applications             ProgramApplication[]
   links                    Link[]
+  customers                Customer[]
   commissions              Commission[]
   rewards                  Reward[]
   discounts                Discount[]                @relation("ProgramDiscounts")
@@ -81,10 +82,11 @@ model Program {
   similarToPrograms        ProgramSimilarity[]       @relation("SimilarProgram")
   categories               ProgramCategory[]
   fraudRules               FraudRule[]
-  fraudEvents              FraudEvent[]
+  fraudEventGroups         FraudEventGroup[]
+  sourceFraudEvents        FraudEvent[]              @relation("SourceFraudEvents")
 
   @@index(workspaceId)
-  @@index(domain)
+  @@index(addedToMarketplaceAt)
 }
 
 model ProgramEnrollment {
@@ -129,6 +131,7 @@ model ProgramEnrollment {
   partner           Partner             @relation(fields: [partnerId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   program           Program             @relation(fields: [programId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   links             Link[]
+  customers         Customer[]
   partnerGroup      PartnerGroup?       @relation(fields: [groupId], references: [id])
   application       ProgramApplication? @relation(fields: [applicationId], references: [id])
   clickReward       Reward?             @relation("ClickRewardEnrollments", fields: [clickRewardId], references: [id])
@@ -139,7 +142,8 @@ model ProgramEnrollment {
   discountCodes     DiscountCode[]
   commissions       Commission[]
   payouts           Payout[]
-  fraudEvents       FraudEvent[]
+  messages          Message[]
+  fraudEventGroups  FraudEventGroup[]
 
   // unique constraints
   @@unique([partnerId, programId])
@@ -158,6 +162,7 @@ model ProgramEnrollment {
   @@index([programId, status, leadToConversionRate])
   @@index([programId, status, returnOnAdSpend])
   // other indexes
+  @@index([programId, groupId])
   @@index([groupId, status])
   @@index(clickRewardId)
   @@index(leadRewardId)
@@ -189,27 +194,4 @@ model ProgramApplication {
   @@index(programId)
   @@index(groupId)
   @@index(email)
-}
-
-enum Category {
-  Artificial_Intelligence
-  Development
-  Design
-  Productivity
-  Finance
-  Marketing
-  Ecommerce
-  Security
-  Education
-  Health
-  Consumer
-}
-
-model ProgramCategory {
-  programId String
-  category  Category
-
-  program Program @relation(fields: [programId], references: [id], onDelete: Cascade)
-
-  @@unique([programId, category])
 }
