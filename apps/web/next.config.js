@@ -44,6 +44,9 @@ module.exports = {
       "@dub/utils",
       "@team-plain/typescript-sdk",
     ],
+    serverActions: {
+      bodySizeLimit: "2mb",
+    },
   },
   webpack: (config, { webpack, isServer }) => {
     if (isServer) {
