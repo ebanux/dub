@@ -5,7 +5,6 @@ import { recordLink } from "@/lib/tinybird";
 import { ProcessedLinkProps } from "@/lib/types";
 import { propagateWebhookTriggerChanges } from "@/lib/webhook/update-webhook";
 import { prisma } from "@dub/prisma";
-import { Prisma } from "@dub/prisma/client";
 import {
   APP_DOMAIN_WITH_NGROK,
   R2_URL,
@@ -69,9 +68,8 @@ export async function createLink(link: ProcessedLinkProps) {
         utm_term,
         utm_content,
         expiresAt: expiresAt ? new Date(expiresAt) : null,
-        geo: geo || Prisma.DbNull,
-
-        testVariants: testVariants || Prisma.DbNull,
+        geo: geo || undefined,
+        testVariants: testVariants || undefined,
         testCompletedAt: testCompletedAt ? new Date(testCompletedAt) : null,
         testStartedAt: testStartedAt ? new Date(testStartedAt) : null,
 

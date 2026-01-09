@@ -73,7 +73,7 @@ export async function bulkCreateLinks({
         utm_content,
         expiresAt: link.expiresAt ? new Date(link.expiresAt) : null,
         geo: link.geo || undefined,
-        testVariants: link.testVariants || Prisma.DbNull,
+        testVariants: link.testVariants || undefined,
       };
     }),
     skipDuplicates: true,
@@ -208,10 +208,10 @@ export async function bulkCreateLinks({
         ...includeProgramEnrollment,
         webhooks: hasWebhooks
           ? {
-              select: {
-                webhookId: true,
-              },
-            }
+            select: {
+              webhookId: true,
+            },
+          }
           : false,
       },
     });
