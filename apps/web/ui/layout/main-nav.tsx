@@ -2,7 +2,7 @@
 
 import { useMediaQuery } from "@dub/ui";
 import { cn } from "@dub/utils";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import {
   ComponentType,
   createContext,
@@ -24,6 +24,8 @@ export const SideNavContext = createContext<SideNavContext>({
   isOpen: false,
   setIsOpen: () => {},
 });
+
+const isEmbed = () => typeof window === "undefined" || window.self !== window.top;
 
 export function MainNav({
   children,
@@ -53,6 +55,8 @@ export function MainNav({
   useEffect(() => {
     setIsOpen(false);
   }, [pathname]);
+
+  if (isEmbed()) return children;
 
   return (
     <div className="min-h-screen md:grid md:grid-cols-[min-content_minmax(0,1fr)]">

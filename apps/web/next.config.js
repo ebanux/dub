@@ -133,6 +133,24 @@ module.exports = {
           },
         ],
       },
+      {
+        source: "/:slug/(analytics|events)",
+        headers: [
+          {
+            key: "Content-Security-Policy",
+            value: "frame-ancestors *",
+          },
+        ],
+      },
+      {
+        source: "/login",
+        headers: [
+          {
+            key: "Content-Security-Policy",
+            value: "frame-ancestors *",
+          },
+        ],
+      },
     ];
   },
   async redirects() {
