@@ -4,7 +4,6 @@ import { recordLink } from "@/lib/tinybird";
 import { LinkProps, ProcessedLinkProps } from "@/lib/types";
 import { propagateWebhookTriggerChanges } from "@/lib/webhook/update-webhook";
 import { prisma } from "@dub/prisma";
-import { Prisma } from "@dub/prisma/client";
 import {
   R2_URL,
   getParamsFromURL,
@@ -102,9 +101,8 @@ export async function updateLink({
       utm_term: utm_term || null,
       utm_content: utm_content || null,
       expiresAt: expiresAt ? new Date(expiresAt) : null,
-      geo: geo || Prisma.DbNull,
-
-      testVariants: testVariants || Prisma.DbNull,
+      geo: geo || undefined,
+      testVariants: testVariants || undefined,
       testCompletedAt: testCompletedAt ? new Date(testCompletedAt) : null,
       testStartedAt: testStartedAt ? new Date(testStartedAt) : null,
 

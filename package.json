@@ -6,6 +6,7 @@
     "build": "turbo build",
     "build:packages": "pnpm -r --filter \"./packages/**\" build",
     "dev": "turbo dev",
+    "dev:https": "turbo dev:https",
     "lint": "turbo lint",
     "clean": "turbo clean",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
@@ -32,5 +33,5 @@
   "resolutions": {
     "chrono-node": "2.7.5"
   },
-  "packageManager": "pnpm@9.15.9"
+  "packageManager": "pnpm@8.6.10"
 }

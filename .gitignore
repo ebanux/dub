@@ -47,3 +47,5 @@ packages/stripe-app/.build/*
 .vitest
 .idea
 /tmp
+/certificates
+/apps/web/certificates

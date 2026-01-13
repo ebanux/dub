@@ -20,6 +20,10 @@ export async function AppMiddleware(req: NextRequest) {
     return EmbedMiddleware(req);
   }
 
+  if (path === '/logout') {
+    return NextResponse.rewrite(new URL(`/app.dub.co${fullPath}`, req.url));
+  }
+
   const user = await getUserViaToken(req);
 
   // if there's no user and the path isn't /login or /register, redirect to /login

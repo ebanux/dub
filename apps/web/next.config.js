@@ -17,6 +17,10 @@ console.warn = (...args) => {
   originalConsoleWarn.apply(console, args);
 };
 
+if (process.env.NODE_ENV === 'development') {
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+}
+
 /** @type {import('next').NextConfig} */
 module.exports = {
   reactStrictMode: false,
@@ -40,6 +44,9 @@ module.exports = {
       "@dub/utils",
       "@team-plain/typescript-sdk",
     ],
+    serverActions: {
+      bodySizeLimit: "2mb",
+    },
   },
   webpack: (config, { webpack, isServer }) => {
     if (isServer) {
@@ -119,6 +126,24 @@ module.exports = {
       },
       {
         source: "/embed/:path*",
+        headers: [
+          {
+            key: "Content-Security-Policy",
+            value: "frame-ancestors *",
+          },
+        ],
+      },
+      {
+        source: "/:slug/(analytics|events)",
+        headers: [
+          {
+            key: "Content-Security-Policy",
+            value: "frame-ancestors *",
+          },
+        ],
+      },
+      {
+        source: "/login",
         headers: [
           {
             key: "Content-Security-Policy",
