@@ -446,7 +446,7 @@ SQL >
 
     %
     SELECT
-        dce.groupByField as groupByField,
+        groupByField,
         clicks,
         leads,
         sales,
@@ -456,8 +456,8 @@ SQL >
     FROM
         (
             SELECT
-                dce.groupByField,
-                dce.clicks,
+                dce.groupByField AS groupByField,
+                dce.clicks AS clicks,
                 COALESCE(dle.leads, 0) AS leads,
                 COALESCE(dse.sales, 0) AS sales,
                 COALESCE(dse.saleAmount, 0) AS saleAmount
