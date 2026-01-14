@@ -133,6 +133,7 @@ module.exports = {
           },
         ],
       },
+      // QRLynk-Integration: allow framing for analytics and events pages
       {
         source: "/:slug/(analytics|events)",
         headers: [
@@ -142,6 +143,7 @@ module.exports = {
           },
         ],
       },
+      // QRLynk-Integration: allow framing for login page
       {
         source: "/login",
         headers: [
