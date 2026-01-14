@@ -1,3 +1,5 @@
+// QRLynk-Integration: Replaced default NextAuth sign-in page with QRlynk authentication flow
+
 "use client";
 
 import { fetchAuthSessionToken, redirectToSignIn } from "@/lib/qrlynk";
