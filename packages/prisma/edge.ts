@@ -1,13 +1,13 @@
-import { Client } from "@planetscale/database";
-import { PrismaPlanetScale } from "@prisma/adapter-planetscale";
 import { PrismaClient } from "@prisma/client";
+import { PrismaTiDBCloud } from "@tidbcloud/prisma-adapter";
+import { PrismaPlanetScale } from "@prisma/adapter-planetscale";
 
-const client = new Client({
-  url: process.env.PLANETSCALE_DATABASE_URL || process.env.DATABASE_URL,
-});
+const TiDBAdapter = () =>
+  new PrismaTiDBCloud({ url: process.env.TIDB_DATABASE_URL, fullResult: true });
 
-const adapter = new PrismaPlanetScale(client);
+const PlanetScaleAdapter = () =>
+  new PrismaPlanetScale({ url: process.env.PLANETSCALE_DATABASE_URL });
 
 export const prismaEdge = new PrismaClient({
-  adapter,
+  adapter: process.env.TIDB_DATABASE_URL ? TiDBAdapter() : PlanetScaleAdapter(),
 });

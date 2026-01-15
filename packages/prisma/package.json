@@ -16,7 +16,9 @@
   "dependencies": {
     "@planetscale/database": "1.19.0",
     "@prisma/adapter-planetscale": "6.19.1",
-    "@prisma/client": "6.19.1"
+    "@prisma/client": "6.19.1",
+    "@tidbcloud/prisma-adapter": "^6.17.0",
+    "@tidbcloud/serverless": "^0.2.0"
   },
   "devDependencies": {
     "@types/node": "18.11.9",

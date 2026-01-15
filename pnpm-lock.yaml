@@ -119,6 +119,9 @@ importers:
       '@team-plain/typescript-sdk':
         specifier: ^5.9.0
         version: 5.9.0
+      '@tidbcloud/serverless':
+        specifier: ^0.2.0
+        version: 0.2.0
       '@tiptap/extension-image':
         specifier: ^3.15.3
         version: 3.15.3(@tiptap/core@3.15.3)
@@ -671,6 +674,12 @@ importers:
       '@prisma/client':
         specifier: 6.19.1
         version: 6.19.1(prisma@6.19.1)(typescript@5.2.2)
+      '@tidbcloud/prisma-adapter':
+        specifier: ^6.17.0
+        version: 6.17.0(@tidbcloud/serverless@0.2.0)
+      '@tidbcloud/serverless':
+        specifier: ^0.2.0
+        version: 0.2.0
     devDependencies:
       '@types/node':
         specifier: 18.11.9
@@ -6520,8 +6529,18 @@ packages:
     transitivePeerDependencies:
       - magicast
 
+  /@prisma/debug@6.17.0:
+    resolution: {integrity: sha512-eE2CB32nr1hRqyLVnOAVY6c//iSJ/PN+Yfoa/2sEzLGpORaCg61d+nvdAkYSh+6Y2B8L4BVyzkRMANLD6nnC2g==}
+    dev: false
+
   /@prisma/debug@6.19.1:
     resolution: {integrity: sha512-h1JImhlAd/s5nhY/e9qkAzausWldbeT+e4nZF7A4zjDYBF4BZmKDt4y0jK7EZapqOm1kW7V0e9agV/iFDy3fWw==}
+
+  /@prisma/driver-adapter-utils@6.17.0:
+    resolution: {integrity: sha512-JqK4STDoZVQnj7ac6+daN5w6l0Vns82tHdj8FVzMdCLMdWd2JgDzDS688gTMZt7rEDNJSb/z9U5XtIP0C08sWg==}
+    dependencies:
+      '@prisma/debug': 6.17.0
+    dev: false
 
   /@prisma/driver-adapter-utils@6.19.1:
     resolution: {integrity: sha512-W6Ds1lOZ2H6VGikchhOYs9dfKgPymfS/FJjtgYRqNTxJyHRyHsfTzGG+MOAupeLhZFHPWPA8eX12gNbgAGT8/g==}
@@ -10932,6 +10951,20 @@ packages:
       '@testing-library/dom': 10.4.0
     dev: false
     optional: true
+
+  /@tidbcloud/prisma-adapter@6.17.0(@tidbcloud/serverless@0.2.0):
+    resolution: {integrity: sha512-ULKaE2e4+j5ijgkvRMN2rz7Ub35Ufh5Z4qkBhGk6BhLb3A1NnnN/+RPITDwYS0Te4bHYYhGwdRSek00jK9g1WQ==}
+    peerDependencies:
+      '@tidbcloud/serverless': '>= 0.1.0'
+    dependencies:
+      '@prisma/driver-adapter-utils': 6.17.0
+      '@tidbcloud/serverless': 0.2.0
+    dev: false
+
+  /@tidbcloud/serverless@0.2.0:
+    resolution: {integrity: sha512-UGmMa9hYeRVcmDjsUE/vNYbsiS4PGHU2M9Y+DFyMUu6gRMxXOfda6rTTnuHQ5OzUsbk6AfV4gtJoEUWvmpBpJw==}
+    engines: {node: '>=16'}
+    dev: false
 
   /@tiptap/core@3.15.3(@tiptap/pm@3.15.3):
     resolution: {integrity: sha512-bmXydIHfm2rEtGju39FiQNfzkFx9CDvJe+xem1dgEZ2P6Dj7nQX9LnA1ZscW7TuzbBRkL5p3dwuBIi3f62A66A==}
