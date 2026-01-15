@@ -10,6 +10,7 @@ import {
   nanoid,
   punyEncode,
 } from "@dub/utils";
+import { SHORT_DOMAIN } from "@dub/utils/src";
 import { geolocation } from "@vercel/functions";
 import { cookies } from "next/headers";
 import {
@@ -23,6 +24,7 @@ import { isCaseSensitiveDomain } from "../api/links/case-sensitivity";
 import { recordClickCache } from "../api/links/record-click-cache";
 import { getLinkViaEdge } from "../planetscale";
 import { getPartnerEnrollmentInfo } from "../planetscale/get-partner-enrollment-info";
+import { msBaseUrl } from "../qrlynk/constants.ts";
 import { cacheDeepLinkClickData } from "./utils/cache-deeplink-click-data";
 import { crawlBitly } from "./utils/crawl-bitly";
 import { createResponseWithCookies } from "./utils/create-response-with-cookies";
@@ -86,6 +88,13 @@ export async function LinkMiddleware(req: NextRequest, ev: NextFetchEvent) {
     if (!linkData) {
       if (domain === "buff.ly") {
         return await crawlBitly(req);
+      }
+
+      if (domain === SHORT_DOMAIN) {
+        return NextResponse.redirect(`${msBaseUrl}/${originalKey}`, {
+          headers: { ...DUB_HEADERS, "X-Robots-Tag": "googlebot: noindex" },
+          status: 302,
+        });
       }
 
       return await handleNotFoundLink(req);
