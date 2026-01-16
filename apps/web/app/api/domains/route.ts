@@ -197,7 +197,9 @@ export const POST = withWorkspace(
         });
       },
       {
-        isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
+        isolationLevel: process.env.PLANETSCALE_DATABASE_URL
+          ? Prisma.TransactionIsolationLevel.Serializable
+          : undefined,
         maxWait: 5000,
         timeout: 5000,
       },
