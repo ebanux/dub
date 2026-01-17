@@ -3,6 +3,9 @@ import { hashToken, isDubAdmin, withWorkspace } from "@/lib/auth";
 import { prisma } from "@dub/prisma";
 import { nanoid } from "@dub/utils";
 import { NextResponse } from "next/server";
+import { createWorkspaceId } from '@/lib/api/workspaces/create-workspace-id.ts';
+import { generateRandomString } from '@/lib/api/utils/generate-random-string.ts';
+import slugify from "@sindresorhus/slugify";
 
 export const dynamic = "force-dynamic";
 
@@ -14,18 +17,34 @@ const findOrCreateWorkspace = async (slug: string, userId: string) => {
 
   if (workspace) return workspace;
 
+  const workspaceId = createWorkspaceId();
+
   return await prisma.project.create({
     data: {
+      id: workspaceId,
       name: slug,
       slug: slug,
       plan: "advanced",
-      users: { create: { userId, role: "owner" } },
+      users: {
+        create: {
+          userId,
+          role: "owner",
+          notificationPreference: {
+            create: {},
+          }
+        },
+      },
       billingCycleStart: new Date().getDate(),
+      invoicePrefix: generateRandomString(8),
+      inviteCode: nanoid(24),
+      defaultDomains: {
+        create: {}, // by default, we give users all the default domains when they create a project
+      },
     },
   });
 };
 
-const findOrCreateUser = async (email: string, workspace: string) => {
+const findOrCreateUser = async (email: string, defaultProjectSlug: string) => {
   const user = await prisma.user.findFirst({
     where: { email },
     select: { id: true, email: true },
@@ -38,7 +57,7 @@ const findOrCreateUser = async (email: string, workspace: string) => {
       id: createId({ prefix: "user_" }),
       email: email,
       name: email.split("@")[0],
-      defaultWorkspace: workspace,
+      defaultWorkspace: defaultProjectSlug,
       emailVerified: new Date(),
     },
   });
@@ -46,7 +65,7 @@ const findOrCreateUser = async (email: string, workspace: string) => {
 
 // POST /api/auth/impersonate/token - Get impersonate auth token
 export const POST = withWorkspace(async ({ req, session }) => {
-  const { email, slug } = await req.json();
+  const { email } = await req.json();
 
   if (!session?.user) {
     return new Response("Unauthorized: Login required.", { status: 401 });
@@ -57,9 +76,10 @@ export const POST = withWorkspace(async ({ req, session }) => {
     return new Response("Unauthorized: Not an admin.", { status: 401 });
   }
 
-  const user = await findOrCreateUser(email, slug);
+  const projectSlug = slugify(email);
+  const user = await findOrCreateUser(email, projectSlug);
 
-  await findOrCreateWorkspace(slug, user.id);
+  await findOrCreateWorkspace(projectSlug, user.id);
 
   const token = nanoid(24);
   const hashedKey = await hashToken(token); // take first 3 and last 4 characters of the key

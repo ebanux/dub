@@ -143,7 +143,9 @@ export const POST = withSession(async ({ req, session }) => {
         });
       },
       {
-        isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
+        isolationLevel: process.env.PLANETSCALE_DATABASE_URL
+          ? Prisma.TransactionIsolationLevel.Serializable
+          : undefined,
         maxWait: 5000,
         timeout: 5000,
       },
@@ -179,6 +181,7 @@ export const POST = withSession(async ({ req, session }) => {
       }),
     );
   } catch (error) {
+    console.log(666,error.message);
     if (
       error instanceof Prisma.PrismaClientKnownRequestError &&
       error.code === "P2002"

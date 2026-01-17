@@ -56,6 +56,7 @@ const CustomPrismaAdapter = (p: PrismaClient) => {
 
 export const authOptions: NextAuthOptions = {
   providers: [
+    // QRLynk-Integration: Add options to QRlynk authentication flow
     QRLynkAuthProvider(),
     EmailProvider({
       sendVerificationRequest({ identifier, url }) {

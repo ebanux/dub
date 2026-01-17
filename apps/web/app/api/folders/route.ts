@@ -113,7 +113,9 @@ export const POST = withWorkspace(
           return newFolder;
         },
         {
-          isolationLevel: Prisma.TransactionIsolationLevel.RepeatableRead,
+          isolationLevel: process.env.PLANETSCALE_DATABASE_URL
+            ? Prisma.TransactionIsolationLevel.RepeatableRead
+            : undefined,
           maxWait: 5000,
           timeout: 5000,
         },
