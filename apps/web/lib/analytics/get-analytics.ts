@@ -70,7 +70,6 @@ export const getAnalytics = async (params: AnalyticsFilters) => {
         [linkId],
       );
 
-      // @ts-ignore
       return analyticsResponse["count"].parse(response.rows[0]);
     }
 
@@ -89,7 +88,6 @@ export const getAnalytics = async (params: AnalyticsFilters) => {
         linkIds,
       );
 
-      // @ts-ignore
       return analyticsResponse["count"].parse(response.rows[0]);
     }
   }
