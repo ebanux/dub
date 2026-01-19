@@ -18,14 +18,13 @@ import { waitUntil } from "@vercel/functions";
 import { Stripe } from "stripe";
 import { authActionClient } from "../safe-action";
 
-const stripe = stripeAppClient({
-  ...(process.env.VERCEL_ENV && { mode: "live" }),
-});
-
 export const createDiscountAction = authActionClient
   .inputSchema(createDiscountSchema)
   .action(async ({ parsedInput, ctx }) => {
     const { workspace, user } = ctx;
+    const stripe = stripeAppClient({
+      ...(process.env.VERCEL_ENV && { mode: "live" }),
+    });
     let { amount, type, maxDuration, couponId, couponTestId, groupId } =
       parsedInput;
 

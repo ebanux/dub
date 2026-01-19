@@ -2,10 +2,6 @@ import { nanoid } from "@dub/utils";
 import { stripeAppClient } from ".";
 import { DiscountProps } from "../types";
 
-const stripe = stripeAppClient({
-  ...(process.env.VERCEL_ENV && { mode: "live" }),
-});
-
 const MAX_ATTEMPTS = 3;
 
 export async function createStripeDiscountCode({
@@ -19,6 +15,10 @@ export async function createStripeDiscountCode({
   code: string;
   shouldRetry?: boolean; // we don't retry if the code is provided by the user
 }) {
+  const stripe = stripeAppClient({
+    ...(process.env.VERCEL_ENV && { mode: "live" }),
+  });
+
   if (!stripeConnectId) {
     throw new Error(
       `stripeConnectId is required to create a Stripe discount code.`,
