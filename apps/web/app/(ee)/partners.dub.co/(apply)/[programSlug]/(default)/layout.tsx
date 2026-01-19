@@ -28,23 +28,27 @@ export async function generateMetadata(props: {
 
   return constructMetadata({
     title: `${program.name} Affiliate Program`,
-    description: `Join the ${program.name} affiliate program and ${
-      program.rewards && program.rewards.length > 0
+    description: `Join the ${program.name} affiliate program and ${program.rewards && program.rewards.length > 0
         ? formatRewardDescription(program.rewards[0]).toLowerCase()
         : "earn commissions"
-    } by referring ${program.name} to your friends and followers.`,
+      } by referring ${program.name} to your friends and followers.`,
     image: `${APP_DOMAIN}/api/og/program?slug=${program.slug}${groupSlug ? `&groupSlug=${groupSlug}` : ""}`,
     canonicalUrl: `${PARTNERS_DOMAIN}/${program.slug}`,
   });
 }
 
 export async function generateStaticParams() {
-  const programs = await getProgramSlugs();
+  try {
+    const programs = await getProgramSlugs();
 
-  return programs.map((program) => ({
-    programSlug: program.slug,
-    groupSlug: DEFAULT_PARTNER_GROUP.slug,
-  }));
+    return programs.map((program) => ({
+      programSlug: program.slug,
+      groupSlug: DEFAULT_PARTNER_GROUP.slug,
+    }));
+  } catch (error) {
+    console.error("Error generating static params for partners app:", error);
+    return [];
+  }
 }
 
 export default async function ApplyLayout(
