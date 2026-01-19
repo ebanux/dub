@@ -1,4 +1,4 @@
-import { qstash } from "@/lib/cron";
+import { qstashEdge as qstash } from "@/lib/cron/edge";
 import { webhookPayloadSchema } from "@/lib/webhook/schemas";
 import { Webhook, WebhookReceiver } from "@dub/prisma/client";
 import { APP_DOMAIN_WITH_NGROK } from "@dub/utils";
