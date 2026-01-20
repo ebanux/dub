@@ -43,7 +43,10 @@ module.exports = {
       "./node_modules/openid-client/**/*",
     ],
   },
+  productionBrowserSourceMaps: false,
   experimental: {
+    cpus: 4,
+    workerThreads: false,
     /*
         optimizePackageImports: [
           "@dub/email",
