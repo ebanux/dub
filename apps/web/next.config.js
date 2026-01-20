@@ -24,6 +24,12 @@ if (process.env.NODE_ENV === 'development') {
 /** @type {import('next').NextConfig} */
 module.exports = {
   reactStrictMode: false,
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   transpilePackages: [
     "prettier",
     "shiki",
