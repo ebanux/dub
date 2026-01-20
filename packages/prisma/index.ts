@@ -1,8 +1,19 @@
 import { PrismaClient } from "@prisma/client";
 
+// function to append ssl to the url
+const appendSSL = (url: string) => {
+  if (url.includes("?ssl=") || url.includes("&ssl=")) {
+    return url;
+  }
+  return `${url}?ssl={"rejectUnauthorized":true}`;
+};
+
 export const prisma =
   global.prisma ||
   new PrismaClient({
+    datasourceUrl: process.env.DATABASE_URL
+      ? appendSSL(process.env.DATABASE_URL)
+      : undefined,
     omit: {
       user: { passwordHash: true },
     },
