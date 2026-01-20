@@ -38,12 +38,14 @@ module.exports = {
     ],
   },
   experimental: {
-    optimizePackageImports: [
-      "@dub/email",
-      "@dub/ui",
-      "@dub/utils",
-      "@team-plain/typescript-sdk",
-    ],
+    /*
+        optimizePackageImports: [
+          "@dub/email",
+          "@dub/ui",
+          "@dub/utils",
+          "@team-plain/typescript-sdk",
+        ],
+    */
     serverActions: {
       bodySizeLimit: "2mb",
     },

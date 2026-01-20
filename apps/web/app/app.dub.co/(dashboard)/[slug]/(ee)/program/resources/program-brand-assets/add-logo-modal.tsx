@@ -15,7 +15,7 @@ import {
 } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 type AddLogoModalProps = {
   showAddLogoModal: boolean;
@@ -160,7 +160,7 @@ function AddLogoModalInner({ setShowAddLogoModal }: AddLogoModalProps) {
                 className={cn(
                   "block w-full rounded-md border-neutral-300 shadow-sm focus:border-neutral-500 focus:ring-neutral-500 sm:text-sm",
                   errors.name &&
-                    "border-red-300 pr-10 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500",
+                  "border-red-300 pr-10 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500",
                 )}
                 {...register("name", { required: "Name is required" })}
               />
