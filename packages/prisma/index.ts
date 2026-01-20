@@ -8,12 +8,13 @@ const appendSSL = (url: string) => {
   return `${url}?ssl={"rejectUnauthorized":true}`;
 };
 
+const databaseUrl =
+  process.env.DATABASE_URL || process.env.TIDB_DATABASE_URL;
+
 export const prisma =
   global.prisma ||
   new PrismaClient({
-    datasourceUrl: process.env.DATABASE_URL
-      ? appendSSL(process.env.DATABASE_URL)
-      : undefined,
+    datasourceUrl: databaseUrl ? appendSSL(databaseUrl) : undefined,
     omit: {
       user: { passwordHash: true },
     },
