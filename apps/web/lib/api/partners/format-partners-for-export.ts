@@ -1,5 +1,5 @@
 import { exportPartnerColumns } from "@/lib/zod/schemas/partners";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 const columnIdToLabel = exportPartnerColumns.reduce(
   (acc, column) => {

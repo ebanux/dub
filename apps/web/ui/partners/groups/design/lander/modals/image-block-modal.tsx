@@ -7,7 +7,7 @@ import { useAction } from "next-safe-action/hooks";
 import { Dispatch, SetStateAction, useId, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 type ImageBlockFormData = z.infer<typeof programLanderImageBlockSchema>["data"];
 

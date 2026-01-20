@@ -9,7 +9,7 @@ import {
   PartnerRole,
   ProgramEnrollmentStatus,
 } from "@dub/prisma/client";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { analyticsQuerySchema, eventsQuerySchema } from "./analytics";
 import { BountySchema, BountySubmissionSchema } from "./bounties";
 import {

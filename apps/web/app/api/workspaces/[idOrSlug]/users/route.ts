@@ -9,7 +9,7 @@ import {
 import { prisma } from "@dub/prisma";
 import { WorkspaceRole } from "@dub/prisma/client";
 import { NextResponse } from "next/server";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 // GET /api/workspaces/[idOrSlug]/users – get users for a specific workspace
 export const GET = withWorkspace(

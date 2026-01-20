@@ -8,7 +8,7 @@ import {
 } from "@/lib/zod/schemas/payouts";
 import { prisma } from "@dub/prisma";
 import { NextResponse } from "next/server";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 // GET /api/programs/[programId]/payouts - get all payouts for a program
 export const GET = withWorkspace(async ({ workspace, searchParams }) => {

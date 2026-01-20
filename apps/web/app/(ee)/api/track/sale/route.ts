@@ -4,7 +4,7 @@ import { parseRequestBody } from "@/lib/api/utils";
 import { withWorkspace } from "@/lib/auth";
 import { trackSaleRequestSchema } from "@/lib/zod/schemas/sales";
 import { NextResponse } from "next/server";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 // POST /api/track/sale – Track a sale conversion event
 export const POST = withWorkspace(

@@ -1,7 +1,7 @@
 import { qstash } from "@/lib/cron";
 import { redis } from "@/lib/upstash";
 import { APP_DOMAIN_WITH_NGROK } from "@dub/utils";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { toltImportPayloadSchema } from "./schemas";
 import { ToltCredentials } from "./types";
 

@@ -8,7 +8,7 @@ import {
 } from "@/ui/partners/rewind/constants";
 import { cn, nFormatter } from "@dub/utils";
 import { ImageResponse } from "next/og";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { loadGoogleFont } from "../load-google-font";
 
 const WIDTH = 1084;

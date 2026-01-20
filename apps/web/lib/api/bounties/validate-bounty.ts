@@ -1,5 +1,5 @@
 import { createBountySchema } from "@/lib/zod/schemas/bounties";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { DubApiError } from "../errors";
 
 export function validateBounty({

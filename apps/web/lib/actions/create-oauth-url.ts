@@ -1,6 +1,6 @@
 "use server";
 
-import * as z from "zod/v4";
+import * as z from "zod";
 import { verifyFolderAccess } from "../folder/permissions";
 import { bitlyOAuthProvider } from "../integrations/bitly/oauth";
 import { authActionClient } from "./safe-action";

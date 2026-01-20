@@ -8,7 +8,7 @@ import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 interface AddEditEmailDomainModalProps {
   setIsOpen: Dispatch<SetStateAction<boolean>>;

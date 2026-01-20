@@ -1,4 +1,4 @@
-import * as z from "zod/v4";
+import * as z from "zod";
 import { hubSpotAuthTokenSchema, hubSpotContactSchema } from "./hubspot/schema";
 
 export type HubSpotAuthToken = z.infer<typeof hubSpotAuthTokenSchema>;

@@ -6,7 +6,7 @@ import { getProgramOrThrow } from "@/lib/api/programs/get-program-or-throw";
 import { FirstPromoterApi } from "@/lib/firstpromoter/api";
 import { firstPromoterImporter } from "@/lib/firstpromoter/importer";
 import { firstPromoterCredentialsSchema } from "@/lib/firstpromoter/schemas";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { authActionClient } from "../safe-action";
 
 const schema = firstPromoterCredentialsSchema.extend({

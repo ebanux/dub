@@ -1,5 +1,5 @@
 import { MessageType } from "@dub/prisma/client";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { PartnerSchema } from "./partners";
 import { ProgramSchema } from "./programs";
 import { UserSchema } from "./users";

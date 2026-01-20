@@ -40,7 +40,7 @@ import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import useSWR from "swr";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 interface CreateCommissionSheetProps {
   setIsOpen: Dispatch<SetStateAction<boolean>>;

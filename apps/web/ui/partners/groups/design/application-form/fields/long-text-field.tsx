@@ -1,7 +1,7 @@
 import { programApplicationFormLongTextFieldSchema } from "@/lib/zod/schemas/program-application-form";
 import { cn } from "@dub/utils";
 import { useFormContext } from "react-hook-form";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { FormControl } from "./form-control";
 import { MaxCharacterCount } from "./max-character-count";
 

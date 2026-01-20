@@ -7,7 +7,7 @@ import { buildUrl, fetcher } from "@dub/utils";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import useSWR from "swr";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { campaignEventsColumns } from "./campaign-events-columns";
 import { CampaignEventsModal } from "./campaign-events-modal";
 

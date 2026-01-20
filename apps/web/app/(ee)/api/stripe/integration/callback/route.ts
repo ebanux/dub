@@ -5,7 +5,7 @@ import { prisma } from "@dub/prisma";
 import { APP_DOMAIN, getSearchParams, STRIPE_INTEGRATION_ID } from "@dub/utils";
 import { redirect } from "next/navigation";
 import { NextRequest } from "next/server";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 const schema = z.object({
   state: z.string(),

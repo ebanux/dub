@@ -2,7 +2,7 @@ import { Campaign, CampaignList } from "@/lib/types";
 import { updateCampaignSchema } from "@/lib/zod/schemas/campaigns";
 import { E2E_PARTNER_GROUP } from "tests/utils/resource";
 import { describe, expect, onTestFinished, test } from "vitest";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { IntegrationHarness } from "../utils/integration";
 
 const campaign: z.infer<typeof updateCampaignSchema> = {

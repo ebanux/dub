@@ -1,6 +1,6 @@
 import { Project, User } from "@dub/prisma/client";
 import { type TestContext } from "vitest";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { env, integrationTestEnv } from "./env";
 import { HttpClient } from "./http";
 import { E2E_USER_ID_MEMBER, E2E_WORKSPACE_ID } from "./resource";

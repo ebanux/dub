@@ -4,7 +4,7 @@ import { analyticsQuerySchema } from "@/lib/zod/schemas/analytics";
 import { DUB_FOUNDING_DATE } from "@dub/utils";
 import { endOfDay, startOfDay } from "date-fns";
 import { NextResponse } from "next/server";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { getCommissionsTimeseries } from "./get-commissions-timeseries";
 import { getTopProgramsByCommissions } from "./get-top-program-by-commissions";
 

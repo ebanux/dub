@@ -1,5 +1,5 @@
 import { normalizeWorkspaceId } from "@/lib/api/workspaces/workspace-id";
-import * as z from "zod/v4";
+import * as z from "zod";
 import {
   booleanQuerySchema,
   getPaginationQuerySchema,

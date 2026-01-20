@@ -1,4 +1,4 @@
-import * as z from "zod/v4";
+import * as z from "zod";
 import { tb } from "./client";
 
 export const recordClickZodSchema = z.object({

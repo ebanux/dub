@@ -6,7 +6,7 @@ import { ratelimit } from "@/lib/upstash";
 import { submissionRequirementsSchema } from "@/lib/zod/schemas/bounties";
 import { prisma } from "@dub/prisma";
 import { nanoid, R2_URL } from "@dub/utils";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { authPartnerActionClient } from "../safe-action";
 
 const schema = z.object({

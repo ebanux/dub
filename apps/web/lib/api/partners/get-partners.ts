@@ -1,6 +1,6 @@
 import { getPartnersQuerySchemaExtended } from "@/lib/zod/schemas/partners";
 import { prisma, sanitizeFullTextSearch } from "@dub/prisma";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 type PartnerFilters = z.infer<typeof getPartnersQuerySchemaExtended> & {
   programId: string;

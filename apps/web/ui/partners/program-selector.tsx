@@ -3,7 +3,7 @@ import { partnerProfileProgramsQuerySchema } from "@/lib/zod/schemas/partner-pro
 import { Combobox, ComboboxProps } from "@dub/ui";
 import { cn, OG_AVATAR_URL } from "@dub/utils";
 import { useMemo, useState } from "react";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 type ProgramSelectorProps = {
   selectedProgramSlug: string | null;

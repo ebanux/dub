@@ -1,4 +1,4 @@
-import * as z from "zod/v4";
+import * as z from "zod";
 import { DubApiError } from "../api/errors";
 import { DomainStatusSchema } from "../zod/schemas/domains";
 import { DYNADOT_API_KEY, DYNADOT_BASE_URL } from "./constants";

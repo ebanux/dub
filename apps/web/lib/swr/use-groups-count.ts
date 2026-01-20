@@ -1,7 +1,7 @@
 import { useRouterStuff } from "@dub/ui";
 import { fetcher } from "@dub/utils";
 import useSWR from "swr";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { getGroupsQuerySchema } from "../zod/schemas/groups";
 import useWorkspace from "./use-workspace";
 

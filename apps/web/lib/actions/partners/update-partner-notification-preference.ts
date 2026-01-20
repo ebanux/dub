@@ -2,7 +2,7 @@
 
 import { partnerNotificationTypes } from "@/lib/zod/schemas/partner-profile";
 import { prisma } from "@dub/prisma";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { authPartnerActionClient } from "../safe-action";
 
 const schema = z.object({

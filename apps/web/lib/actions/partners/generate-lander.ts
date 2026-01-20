@@ -17,7 +17,7 @@ import FireCrawlApp, {
   ScrapeResponse,
 } from "@mendable/firecrawl-js";
 import { generateObject } from "ai";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { authActionClient } from "../safe-action";
 
 const schema = z.object({

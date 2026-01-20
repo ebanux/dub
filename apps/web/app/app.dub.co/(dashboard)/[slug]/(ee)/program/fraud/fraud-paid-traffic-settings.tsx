@@ -16,7 +16,7 @@ import {
 import { cn } from "@dub/utils/src";
 import React from "react";
 import { useFormContext } from "react-hook-form";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 type FormData = z.infer<
   typeof updateFraudRuleSettingsSchema.shape.paidTrafficDetected

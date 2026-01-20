@@ -21,7 +21,7 @@ import {
   PARTNERS_DOMAIN,
 } from "@dub/utils";
 import { waitUntil } from "@vercel/functions";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { uploadedImageSchema } from "../../zod/schemas/misc";
 import { authPartnerActionClient } from "../safe-action";
 

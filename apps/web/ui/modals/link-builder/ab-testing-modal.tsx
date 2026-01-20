@@ -38,7 +38,7 @@ import {
 } from "react";
 import { useForm, useFormContext } from "react-hook-form";
 import { toast } from "sonner";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 const parseTests = (testVariants: LinkFormData["testVariants"]) =>
   Array.isArray(testVariants) ? ABTestVariantsSchema.parse(testVariants) : null;

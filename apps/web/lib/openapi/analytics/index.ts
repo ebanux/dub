@@ -2,7 +2,7 @@ import { openApiErrorResponses } from "@/lib/openapi/responses";
 import { analyticsQuerySchema } from "@/lib/zod/schemas/analytics";
 import { analyticsResponse } from "@/lib/zod/schemas/analytics-response";
 import { ZodOpenApiOperationObject, ZodOpenApiPathsObject } from "zod-openapi";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 const retrieveAnalytics: ZodOpenApiOperationObject = {
   operationId: "retrieveAnalytics",

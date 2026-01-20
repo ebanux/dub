@@ -4,7 +4,7 @@ import { RESOURCE_COLORS } from "@/ui/colors";
 import { PartnerLinkStructure } from "@dub/prisma/client";
 import { validSlugRegex } from "@dub/utils";
 import slugify from "@sindresorhus/slugify";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { DiscountSchema } from "./discount";
 import { booleanQuerySchema, getPaginationQuerySchema } from "./misc";
 import { programApplicationFormSchema } from "./program-application-form";

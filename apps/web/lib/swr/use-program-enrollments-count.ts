@@ -1,7 +1,7 @@
 import { fetcher } from "@dub/utils";
 import { useSession } from "next-auth/react";
 import useSWR from "swr";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { partnerProfileProgramsCountQuerySchema } from "../zod/schemas/partner-profile";
 
 export default function useProgramEnrollmentsCount(

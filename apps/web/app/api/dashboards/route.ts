@@ -10,7 +10,7 @@ import {
 import { prisma } from "@dub/prisma";
 import { waitUntil } from "@vercel/functions";
 import { NextResponse } from "next/server";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 // GET /api/dashboards – get all dashboards
 export const GET = withWorkspace(

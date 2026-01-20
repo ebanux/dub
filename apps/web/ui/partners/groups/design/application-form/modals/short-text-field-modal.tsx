@@ -7,7 +7,7 @@ import { motion } from "motion/react";
 import { Dispatch, SetStateAction, useId } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { v4 as uuid } from "uuid";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 const MIN_LENGTH = 1;
 const MAX_LENGTH = 1000;

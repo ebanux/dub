@@ -6,7 +6,7 @@ import { Button, CardSelector } from "@dub/ui";
 import { useAction } from "next-safe-action/hooks";
 import { useState } from "react";
 import { toast } from "sonner";
-import * as z from "zod/v4";
+import * as z from "zod";
 import {
   HUBSPOT_DEFAULT_SETTINGS,
   LEAD_TRIGGER_EVENT_OPTIONS,

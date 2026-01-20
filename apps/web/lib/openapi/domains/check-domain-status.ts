@@ -4,7 +4,7 @@ import {
   searchDomainSchema,
 } from "@/lib/zod/schemas/domains";
 import { ZodOpenApiOperationObject } from "zod-openapi";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 export const checkDomainStatus: ZodOpenApiOperationObject = {
   operationId: "checkDomainStatus",

@@ -20,7 +20,7 @@ import { BountySubmission, WorkspaceRole } from "@dub/prisma/client";
 import { getDomainWithoutWWW } from "@dub/utils";
 import { waitUntil } from "@vercel/functions";
 import { formatDistanceToNow } from "date-fns";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { authPartnerActionClient } from "../safe-action";
 
 const schema = z.object({

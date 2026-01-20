@@ -1,6 +1,6 @@
 "use server";
 
-import * as z from "zod/v4";
+import * as z from "zod";
 import { onboardingStepCache } from "../api/workspaces/onboarding-step-cache";
 import { ONBOARDING_STEPS } from "../onboarding/types";
 import { authUserActionClient } from "./safe-action";
