@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "concurrently --kill-others \"pnpm prisma:generate && next dev --turbopack --port 8888\" \"pnpm prisma:generate && pnpm prisma:studio --browser none\"",
     "dev:https": "concurrently --kill-others \"pnpm prisma:generate && next dev --experimental-https --experimental-https-key ./certificates/localhost-key.pem --experimental-https-cert ./certificates/localhost.pem --turbopack --port 8888\" \"pnpm prisma:generate && pnpm prisma:studio --browser none\"",
-    "build": "pnpm prisma:generate && NODE_OPTIONS='--max-old-space-size=2560' next build",
+    "build": "pnpm prisma:generate && next build",
     "lint": "next lint",
     "start": "next start",
     "script": "tsx ./scripts/run.ts",
