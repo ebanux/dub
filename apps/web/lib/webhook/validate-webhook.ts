@@ -1,6 +1,6 @@
 import { prisma } from "@dub/prisma";
 import { Webhook } from "@dub/prisma/client";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { DubApiError } from "../api/errors";
 import { getDefaultProgramIdOrThrow } from "../api/programs/get-default-program-id-or-throw";
 import { Session } from "../auth";

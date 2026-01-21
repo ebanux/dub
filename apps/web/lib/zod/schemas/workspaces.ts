@@ -1,7 +1,7 @@
 import { WorkspaceRole } from "@dub/prisma/client";
 import { DEFAULT_REDIRECTS, RESERVED_SLUGS, validSlugRegex } from "@dub/utils";
 import slugify from "@sindresorhus/slugify";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { DomainSchema } from "./domains";
 import {
   googleUserContentUrlSchema,

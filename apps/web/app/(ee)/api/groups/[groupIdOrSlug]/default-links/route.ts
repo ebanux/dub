@@ -15,7 +15,7 @@ import { prisma } from "@dub/prisma";
 import { APP_DOMAIN_WITH_NGROK, constructURLFromUTMParams } from "@dub/utils";
 import { waitUntil } from "@vercel/functions";
 import { NextResponse } from "next/server";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 // GET /api/groups/[groupIdOrSlug]/default-links - get all default links for a group
 export const GET = withWorkspace(

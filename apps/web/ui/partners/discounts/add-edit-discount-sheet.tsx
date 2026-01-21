@@ -32,7 +32,7 @@ import {
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import { toast } from "sonner";
 import { mutate } from "swr";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { STRIPE_ERROR_MAP } from "../constants";
 import { RewardDiscountPartnersCard } from "../groups/reward-discount-partners-card";
 

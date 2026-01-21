@@ -1,7 +1,7 @@
 import { trackSale } from "@/lib/api/conversions/track-sale";
 import { WorkspaceProps } from "@/lib/types";
 import { trackSaleRequestSchema } from "@/lib/zod/schemas/sales";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 // TODO:
 // See if we can use {CONVERTED_REVENUE}

@@ -1,8 +1,8 @@
-import { qstash } from "@/lib/cron";
+import { qstashEdge as qstash } from "@/lib/cron/edge";
 import { webhookPayloadSchema } from "@/lib/webhook/schemas";
 import { Webhook, WebhookReceiver } from "@dub/prisma/client";
 import { APP_DOMAIN_WITH_NGROK } from "@dub/utils";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { formatEventForSegment } from "../integrations/segment/transform";
 import { createSegmentBasicAuthHeader } from "../integrations/segment/utils";
 import { formatEventForSlack } from "../integrations/slack/transform";

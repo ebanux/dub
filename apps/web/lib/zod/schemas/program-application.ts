@@ -1,4 +1,4 @@
-import * as z from "zod/v4";
+import * as z from "zod";
 import { EnrolledPartnerSchema, PartnerOnlinePresenceSchema } from "./partners";
 import { ProgramEnrollmentSchema } from "./programs";
 

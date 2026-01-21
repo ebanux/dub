@@ -3,7 +3,7 @@ import { bulkUpdateLinksBodySchema } from "@/lib/zod/schemas/links";
 import { prisma } from "@dub/prisma";
 import { R2_URL, getParamsFromURL, nanoid, truncate } from "@dub/utils";
 import { waitUntil } from "@vercel/functions";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { combineTagIds } from "../tags/combine-tag-ids";
 import { includeProgramEnrollment } from "./include-program-enrollment";
 import { includeTags } from "./include-tags";

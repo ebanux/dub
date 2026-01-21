@@ -25,11 +25,10 @@ export async function generateMetadata(props: {
   if (program) {
     return constructMetadata({
       title: `${program.name} Affiliate Program`,
-      description: `Join the ${program.name} affiliate program and ${
-        program.rewards && program.rewards.length > 0
+      description: `Join the ${program.name} affiliate program and ${program.rewards && program.rewards.length > 0
           ? formatRewardDescription(program.rewards[0]).toLowerCase()
           : "earn commissions"
-      } by referring ${program.name} to your friends and followers.`,
+        } by referring ${program.name} to your friends and followers.`,
       image: `${PARTNERS_DOMAIN}/api/og/program?slug=${program.slug}`,
       canonicalUrl: `${PARTNERS_DOMAIN}/${program.slug}`,
     });
@@ -43,11 +42,16 @@ export async function generateMetadata(props: {
 }
 
 export async function generateStaticParams() {
-  const programs = await getProgramSlugs();
+  try {
+    const programs = await getProgramSlugs();
 
-  return programs.map((program) => ({
-    programSlug: program.slug,
-  }));
+    return programs.map((program) => ({
+      programSlug: program.slug,
+    }));
+  } catch (error) {
+    console.error("Error generating static params for partner auth layout:", error);
+    return [];
+  }
 }
 
 export default async function PartnerAuthLayout(props: {

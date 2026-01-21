@@ -3,7 +3,7 @@ import { linkCache } from "@/lib/api/links/cache";
 import { verifyQstashSignature } from "@/lib/cron/verify-qstash";
 import { prisma } from "@dub/prisma";
 import { chunk } from "@dub/utils";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { logAndRespond } from "../../utils";
 
 export const dynamic = "force-dynamic";

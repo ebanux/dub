@@ -1,7 +1,7 @@
 import { openApiErrorResponses } from "@/lib/openapi/responses";
 import { getTagsQuerySchema, LinkTagSchema } from "@/lib/zod/schemas/tags";
 import { ZodOpenApiOperationObject } from "zod-openapi";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 export const getTags: ZodOpenApiOperationObject = {
   operationId: "getTags",

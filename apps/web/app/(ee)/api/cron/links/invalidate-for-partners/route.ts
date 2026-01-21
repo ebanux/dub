@@ -2,7 +2,7 @@ import { handleAndReturnErrorResponse } from "@/lib/api/errors";
 import { linkCache } from "@/lib/api/links/cache";
 import { verifyQstashSignature } from "@/lib/cron/verify-qstash";
 import { prisma } from "@dub/prisma";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 export const dynamic = "force-dynamic";
 

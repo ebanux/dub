@@ -9,7 +9,7 @@ import { isClickOnInteractiveChild } from "@dub/utils";
 import { DollarSign, Trophy } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import React from "react";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 type PreferenceType = z.infer<typeof notificationTypes>;
 type Preferences = Record<PreferenceType, boolean>;

@@ -13,7 +13,7 @@ import {
   getPrettyUrl,
   nFormatter,
 } from "@dub/utils";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { logAndRespond } from "../utils";
 import { resolveClickRewardAmount } from "./resolve-click-reward-amount";
 

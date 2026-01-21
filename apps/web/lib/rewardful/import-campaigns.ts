@@ -17,11 +17,10 @@ import { RewardfulApi } from "./api";
 import { rewardfulImporter } from "./importer";
 import { RewardfulImportPayload } from "./types";
 
-const stripe = stripeAppClient({
-  ...(process.env.VERCEL_ENV && { mode: "live" }),
-});
-
 export async function importCampaigns(payload: RewardfulImportPayload) {
+  const stripe = stripeAppClient({
+    ...(process.env.VERCEL_ENV && { mode: "live" }),
+  });
   const { programId, campaignIds } = payload;
 
   const program = await prisma.program.findUniqueOrThrow({
@@ -149,11 +148,11 @@ export async function importCampaigns(payload: RewardfulImportPayload) {
               : RewardStructure.percentage,
           ...(reward_type === "amount"
             ? {
-                amountInCents: commission_amount_cents,
-              }
+              amountInCents: commission_amount_cents,
+            }
             : {
-                amountInPercentage: new Prisma.Decimal(commission_percent),
-              }),
+              amountInPercentage: new Prisma.Decimal(commission_percent),
+            }),
         },
       });
 

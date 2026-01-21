@@ -1,6 +1,6 @@
 import { formatUTCDateTimeClickhouse } from "@/lib/analytics/utils/format-utc-datetime-clickhouse";
 import { tb } from "@/lib/tinybird";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { prefixWorkspaceId } from "../workspaces/workspace-id";
 
 export const auditLogFilterSchemaTB = z.object({

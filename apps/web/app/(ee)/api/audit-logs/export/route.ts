@@ -5,7 +5,7 @@ import { getDefaultProgramIdOrThrow } from "@/lib/api/programs/get-default-progr
 import { parseRequestBody } from "@/lib/api/utils";
 import { withWorkspace } from "@/lib/auth";
 import { getPlanCapabilities } from "@/lib/plan-capabilities";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 const auditLogExportQuerySchema = z.object({
   start: z.string(),

@@ -7,7 +7,7 @@ import { CustomerRowItem } from "@/ui/customers/customer-row-item";
 import { Button, Table, TimestampTooltip, useTable } from "@dub/ui";
 import { formatDateTimeSmart } from "@dub/utils";
 import Link from "next/link";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 type EventDataProps = z.infer<(typeof fraudEventSchemas)["customerEmailMatch"]>;
 

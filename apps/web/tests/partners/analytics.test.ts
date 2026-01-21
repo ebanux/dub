@@ -1,6 +1,6 @@
 import { partnerAnalyticsResponseSchema } from "@/lib/zod/schemas/partners";
 import { describe, expect, test } from "vitest";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { env } from "../utils/env";
 import { IntegrationHarness } from "../utils/integration";
 import { E2E_PARTNER } from "../utils/resource";

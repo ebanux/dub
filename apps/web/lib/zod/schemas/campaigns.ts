@@ -3,7 +3,7 @@ import {
   WorkflowAttribute,
 } from "@/lib/types";
 import { CampaignStatus, CampaignType } from "@dub/prisma/client";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { GroupSchema } from "./groups";
 import { getPaginationQuerySchema } from "./misc";
 import { EnrolledPartnerSchema } from "./partners";

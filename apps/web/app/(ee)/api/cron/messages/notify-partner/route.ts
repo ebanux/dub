@@ -7,7 +7,7 @@ import { prisma } from "@dub/prisma";
 import { NotificationEmailType } from "@dub/prisma/client";
 import { log } from "@dub/utils";
 import { subDays } from "date-fns";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { logAndRespond } from "../../utils";
 
 export const dynamic = "force-dynamic";

@@ -1,6 +1,6 @@
 import { DATE_RANGE_INTERVAL_PRESETS } from "@/lib/analytics/constants";
 import { CommissionStatus, CommissionType } from "@dub/prisma/client";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { CustomerSchema } from "./customers";
 import { getPaginationQuerySchema } from "./misc";
 import { EnrolledPartnerSchema, WebhookPartnerSchema } from "./partners";

@@ -3,7 +3,7 @@
 import { ToltApi } from "@/lib/tolt/api";
 import { toltImporter } from "@/lib/tolt/importer";
 import { ToltProgram } from "@/lib/tolt/types";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { authActionClient } from "../safe-action";
 
 const schema = z.object({

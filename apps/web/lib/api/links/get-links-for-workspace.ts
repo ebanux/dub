@@ -1,6 +1,6 @@
 import { getLinksQuerySchemaExtended } from "@/lib/zod/schemas/links";
 import { prisma } from "@dub/prisma";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { combineTagIds } from "../tags/combine-tag-ids";
 import { encodeKeyIfCaseSensitive } from "./case-sensitivity";
 import { transformLink } from "./utils";

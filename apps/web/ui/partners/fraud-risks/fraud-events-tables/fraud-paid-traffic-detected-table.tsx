@@ -22,7 +22,7 @@ import {
 } from "@dub/ui";
 import { capitalize, formatDateTimeSmart, getPrettyUrl } from "@dub/utils";
 import Link from "next/link";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 type EventDataProps = z.infer<
   (typeof fraudEventSchemas)["paidTrafficDetected"]

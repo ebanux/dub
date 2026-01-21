@@ -1,6 +1,6 @@
 import { getCommissions } from "@/lib/api/commissions/get-commissions";
 import { getCommissionsQuerySchema } from "@/lib/zod/schemas/commissions";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 type CommissionFilters = Omit<
   z.infer<typeof getCommissionsQuerySchema>,

@@ -1,6 +1,6 @@
 import { ABTestVariantsSchema, MAX_TEST_COUNT } from "@/lib/zod/schemas/links";
 import { cookies } from "next/headers";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 /**
  * Determines the destination URL for a link with A/B testVariants using weighted random selection

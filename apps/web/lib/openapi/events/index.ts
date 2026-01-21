@@ -4,7 +4,7 @@ import { clickEventResponseSchema } from "@/lib/zod/schemas/clicks";
 import { leadEventResponseSchema } from "@/lib/zod/schemas/leads";
 import { saleEventResponseSchema } from "@/lib/zod/schemas/sales";
 import { ZodOpenApiOperationObject, ZodOpenApiPathsObject } from "zod-openapi";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 export const listEvents: ZodOpenApiOperationObject = {
   operationId: "listEvents",

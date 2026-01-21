@@ -1,4 +1,4 @@
-import * as z from "zod/v4";
+import * as z from "zod";
 
 // Common schema for all fields
 export const programApplicationFormFieldCommonSchema = z.object({

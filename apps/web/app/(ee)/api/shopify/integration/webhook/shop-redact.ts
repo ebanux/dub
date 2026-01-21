@@ -1,7 +1,7 @@
 import { createPlainThread } from "@/lib/plain/create-plain-thread";
 import { prisma } from "@dub/prisma";
 import { waitUntil } from "@vercel/functions";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 const schema = z.object({
   shop_domain: z.string(),

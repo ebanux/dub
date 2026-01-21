@@ -7,7 +7,7 @@ import { prisma } from "@dub/prisma";
 import { Prisma } from "@dub/prisma/client";
 import { APP_DOMAIN_WITH_NGROK } from "@dub/utils";
 import { endOfMonth, format, startOfMonth, subMonths } from "date-fns";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { logAndRespond } from "../../utils";
 
 export const dynamic = "force-dynamic";

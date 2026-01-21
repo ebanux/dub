@@ -16,7 +16,7 @@ import { Prisma } from "@dub/prisma/client";
 import { combineWords, nanoid, R2_URL } from "@dub/utils";
 import { waitUntil } from "@vercel/functions";
 import { NextResponse } from "next/server";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 const updateDomainBodySchemaExtended = updateDomainBodySchema.extend({
   deepviewData: z.string().nullish(),

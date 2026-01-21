@@ -1,4 +1,4 @@
-import * as z from "zod/v4";
+import * as z from "zod";
 import { domainKeySchema } from "./links";
 
 export const dashboardSchema = z.object({

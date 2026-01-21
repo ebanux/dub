@@ -10,7 +10,7 @@ import { sendEmail } from "@dub/email";
 import ExportReady from "@dub/email/templates/export-ready";
 import { prisma } from "@dub/prisma";
 import { log } from "@dub/utils";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { logAndRespond } from "../../utils";
 import { fetchPartnersBatch } from "./fetch-partners-batch";
 

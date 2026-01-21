@@ -1,7 +1,7 @@
 import { fetcher } from "@dub/utils";
 import { useSession } from "next-auth/react";
 import useSWR from "swr";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { ProgramEnrollmentProps } from "../types";
 import { partnerProfileProgramsQuerySchema } from "../zod/schemas/partner-profile";
 

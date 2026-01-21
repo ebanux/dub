@@ -4,7 +4,7 @@ import { NOTIFICATION_PREFERENCE_TYPES } from "@/lib/constants/notification-pref
 import { verifyUnsubscribeToken } from "@/lib/email/unsubscribe-token";
 import { prisma } from "@dub/prisma";
 import { NextRequest, NextResponse } from "next/server";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 const requestSchema = z.object({
   token: z.string(),

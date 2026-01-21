@@ -12,7 +12,7 @@ import { sendBatchEmail } from "@dub/email";
 import PartnerAccountMerged from "@dub/email/templates/partner-account-merged";
 import { prisma } from "@dub/prisma";
 import { log, prettyPrint, R2_URL } from "@dub/utils";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 export const dynamic = "force-dynamic";
 

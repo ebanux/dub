@@ -9,7 +9,7 @@ import {
   GOOGLE_FAVICON_URL,
 } from "@dub/utils";
 import { motion } from "motion/react";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 export function ReferralsEmbedResources({
   resources,

@@ -1,4 +1,4 @@
-import * as z from "zod/v4";
+import * as z from "zod";
 import { ExpandedLink } from "../api/links/utils/transform-link";
 import { RedisLinkProps } from "../types";
 import { ABTestVariantsSchema } from "../zod/schemas/links";
