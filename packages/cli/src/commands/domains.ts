@@ -6,7 +6,7 @@ import chalk from "chalk";
 import { Command } from "commander";
 import ora from "ora";
 import prompts from "prompts";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 const domainOptionsSchema = z.object({
   slug: z.string().min(3, {
