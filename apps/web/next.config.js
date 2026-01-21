@@ -45,7 +45,7 @@ module.exports = {
   },
   productionBrowserSourceMaps: false,
   experimental: {
-    cpus: 4,
+    cpus: 1,
     workerThreads: false,
     /*
         optimizePackageImports: [
