@@ -44,19 +44,6 @@ export async function generateMetadata(props: {
   }
 }
 
-export async function generateStaticParams() {
-  try {
-    const programs = await getProgramSlugs();
-
-    return programs.map((program) => ({
-      programSlug: program.slug,
-      groupSlug: DEFAULT_PARTNER_GROUP.slug,
-    }));
-  } catch (error) {
-    console.error("Error generating static params for partners app:", error);
-    return [];
-  }
-}
 
 export default async function ApplyLayout(
   props: PropsWithChildren<{

@@ -16,27 +16,6 @@ import { MarketplaceProgramHeaderControls } from "./header-controls";
 
 export const revalidate = 3600; // 1 hour
 
-export async function generateStaticParams() {
-  try {
-    const programs = await prisma.program.findMany({
-      where: {
-        addedToMarketplaceAt: {
-          not: null,
-        },
-      },
-      select: {
-        slug: true,
-      },
-    });
-
-    return programs.map((program) => ({
-      programSlug: program.slug,
-    }));
-  } catch (error) {
-    console.error("Error generating static params for marketplace program page:", error);
-    return [];
-  }
-}
 
 export default async function MarketplaceProgramPage(props: {
   params: Promise<{ programSlug: string }>;
