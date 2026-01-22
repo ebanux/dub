@@ -47,6 +47,7 @@ module.exports = {
   experimental: {
     cpus: 1,
     workerThreads: false,
+    optimizePackageImports: [],
     /*
         optimizePackageImports: [
           "@dub/email",
