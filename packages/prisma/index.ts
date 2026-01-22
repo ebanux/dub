@@ -1,12 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 
-console.log("[DEBUG] @dub/prisma: Module loading...");
-console.log(`[DEBUG] NODE_ENV: ${process.env.NODE_ENV}`);
-console.log(`[DEBUG] DATABASE_URL present: ${!!process.env.DATABASE_URL}`);
-console.log(`[DEBUG] TIDB_DATABASE_URL present: ${!!process.env.TIDB_DATABASE_URL}`);
-if (process.env.DATABASE_URL) console.log(`[DEBUG] DATABASE_URL starts with: ${process.env.DATABASE_URL.substring(0, 10)}... (includes ssl: ${process.env.DATABASE_URL.includes("ssl=")})`);
-
-
 // function to append ssl to the url
 const appendSSL = (url: string) => {
   if (url.includes("ssl=")) return url;
@@ -26,13 +19,7 @@ if (databaseUrl) {
 }
 
 if (process.env.NODE_ENV === "production" && !global.prisma) {
-  console.log("Prisma Client Initializing...");
-  console.log("Database URL found:", !!databaseUrl);
-  if (databaseUrl) {
-    const safeUrl = databaseUrl.replace(/:[^:@]*@/, ":****@");
-    console.log("Original URL (masked):", safeUrl);
-    console.log("Final URL (masked):", appendSSL(safeUrl));
-  } else {
+  if (!databaseUrl) {
     console.warn("WARNING: No DATABASE_URL or TIDB_DATABASE_URL found!");
   }
 }
