@@ -10,6 +10,14 @@ const appendSSL = (url: string) => {
 const databaseUrl =
   process.env.DATABASE_URL || process.env.TIDB_DATABASE_URL;
 
+// Ensure that we are using the correct database URL
+if (databaseUrl) {
+  const secureUrl = appendSSL(databaseUrl);
+  // Explicitly override env vars to ensure consistency
+  if (process.env.DATABASE_URL) process.env.DATABASE_URL = secureUrl;
+  if (process.env.TIDB_DATABASE_URL) process.env.TIDB_DATABASE_URL = secureUrl;
+}
+
 if (process.env.NODE_ENV === "production" && !global.prisma) {
   console.log("Prisma Client Initializing...");
   console.log("Database URL found:", !!databaseUrl);

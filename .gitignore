@@ -49,3 +49,5 @@ packages/stripe-app/.build/*
 /tmp
 /certificates
 /apps/web/certificates
+# Local Netlify folder
+.netlify
