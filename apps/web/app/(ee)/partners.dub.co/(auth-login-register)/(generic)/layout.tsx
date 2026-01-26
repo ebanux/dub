@@ -25,11 +25,10 @@ export async function generateMetadata(props: {
   if (program) {
     return constructMetadata({
       title: `${program.name} Affiliate Program`,
-      description: `Join the ${program.name} affiliate program and ${
-        program.rewards && program.rewards.length > 0
-          ? formatRewardDescription(program.rewards[0]).toLowerCase()
-          : "earn commissions"
-      } by referring ${program.name} to your friends and followers.`,
+      description: `Join the ${program.name} affiliate program and ${program.rewards && program.rewards.length > 0
+        ? formatRewardDescription(program.rewards[0]).toLowerCase()
+        : "earn commissions"
+        } by referring ${program.name} to your friends and followers.`,
       image: `${PARTNERS_DOMAIN}/api/og/program?slug=${program.slug}`,
       canonicalUrl: `${PARTNERS_DOMAIN}/${program.slug}`,
     });
@@ -42,13 +41,6 @@ export async function generateMetadata(props: {
   });
 }
 
-export async function generateStaticParams() {
-  const programs = await getProgramSlugs();
-
-  return programs.map((program) => ({
-    programSlug: program.slug,
-  }));
-}
 
 export default async function PartnerAuthLayout(props: {
   params: Promise<{ programSlug?: string }>;

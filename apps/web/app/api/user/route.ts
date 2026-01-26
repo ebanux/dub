@@ -14,7 +14,7 @@ import {
 } from "@dub/utils";
 import { waitUntil } from "@vercel/functions";
 import { NextResponse } from "next/server";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 const updateUserSchema = z.object({
   name: z.preprocess(trim, z.string().min(1).max(64)).optional(),

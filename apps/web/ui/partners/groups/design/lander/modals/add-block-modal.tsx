@@ -6,7 +6,7 @@ import { cn } from "@dub/utils";
 import { Dispatch, Fragment, ReactNode, SetStateAction, useState } from "react";
 import { useWatch } from "react-hook-form";
 import { v4 as uuid } from "uuid";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { useBrandingFormContext } from "../../branding-form";
 import {
   AccordionBlockModal,

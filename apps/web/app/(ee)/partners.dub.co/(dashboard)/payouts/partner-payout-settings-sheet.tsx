@@ -28,7 +28,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import TextareaAutosize from "react-textarea-autosize";
 import { toast } from "sonner";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 type PartnerPayoutSettingsFormData = z.infer<
   typeof partnerPayoutSettingsSchema

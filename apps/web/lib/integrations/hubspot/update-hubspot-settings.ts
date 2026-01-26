@@ -4,7 +4,7 @@ import { authActionClient } from "@/lib/actions/safe-action";
 import { prisma } from "@dub/prisma";
 import { HUBSPOT_INTEGRATION_ID } from "@dub/utils";
 import { revalidatePath } from "next/cache";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { hubSpotSettingsSchema } from "./schema";
 
 const schema = hubSpotSettingsSchema.extend({

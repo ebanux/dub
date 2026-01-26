@@ -4,7 +4,7 @@ import { Category } from "@dub/prisma/client";
 import FireCrawlApp from "@mendable/firecrawl-js";
 import { generateObject } from "ai";
 import "dotenv-flow/config";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 const CategoryEnum = z.enum(Category);
 

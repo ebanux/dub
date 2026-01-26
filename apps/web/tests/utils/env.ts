@@ -1,4 +1,4 @@
-import * as z from "zod/v4";
+import * as z from "zod";
 
 export const integrationTestEnv = z.object({
   E2E_BASE_URL: z.url().min(1),

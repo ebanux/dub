@@ -6,7 +6,7 @@ import { getDefaultProgramIdOrThrow } from "@/lib/api/programs/get-default-progr
 import { sendEmail } from "@dub/email";
 import ProgramInvite from "@dub/email/templates/program-invite";
 import { prisma } from "@dub/prisma";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { authActionClient } from "../safe-action";
 
 const resendProgramInviteSchema = z.object({

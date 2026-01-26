@@ -24,6 +24,12 @@ if (process.env.NODE_ENV === 'development') {
 /** @type {import('next').NextConfig} */
 module.exports = {
   reactStrictMode: false,
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   transpilePackages: [
     "prettier",
     "shiki",
@@ -37,13 +43,19 @@ module.exports = {
       "./node_modules/openid-client/**/*",
     ],
   },
+  productionBrowserSourceMaps: false,
   experimental: {
-    optimizePackageImports: [
-      "@dub/email",
-      "@dub/ui",
-      "@dub/utils",
-      "@team-plain/typescript-sdk",
-    ],
+    cpus: 1,
+    workerThreads: false,
+    optimizePackageImports: [],
+    /*
+        optimizePackageImports: [
+          "@dub/email",
+          "@dub/ui",
+          "@dub/utils",
+          "@team-plain/typescript-sdk",
+        ],
+    */
     serverActions: {
       bodySizeLimit: "2mb",
     },

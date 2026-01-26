@@ -1,5 +1,5 @@
 import { UserProps } from "@/lib/types";
-import { prismaEdge } from "@dub/prisma/edge";
+import { conn } from "@/lib/planetscale/connection";
 import { NextRequest } from "next/server";
 
 export async function hasPendingInvites({
@@ -16,14 +16,14 @@ export async function hasPendingInvites({
     return true;
   }
 
-  const pendingInvites = await prismaEdge.projectInvite.count({
-    where: {
-      email: user.email,
-      expires: {
-        gte: new Date(),
-      },
-    },
-  });
+  if (!user.email) return false;
+
+  const { rows } = await conn.execute(
+    `SELECT count(*) as count FROM ProjectInvite WHERE email = ? AND expires >= NOW()`,
+    [user.email],
+  );
+
+  const pendingInvites = rows && rows.length > 0 ? (rows[0] as any).count : 0;
 
   return pendingInvites > 0;
 }

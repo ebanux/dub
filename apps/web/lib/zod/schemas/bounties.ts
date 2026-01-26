@@ -8,7 +8,7 @@ import {
   BountySubmissionStatus,
   BountyType,
 } from "@dub/prisma/client";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { CommissionSchema } from "./commissions";
 import { GroupSchema } from "./groups";
 import { booleanQuerySchema, getPaginationQuerySchema } from "./misc";

@@ -5,7 +5,7 @@ import { getPartnerEarningsTimeseriesSchema } from "@/lib/zod/schemas/partner-pr
 import { prisma } from "@dub/prisma";
 import { Prisma } from "@dub/prisma/client";
 import { format } from "date-fns";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 export async function getPartnerEarningsTimeseries({
   partnerId,

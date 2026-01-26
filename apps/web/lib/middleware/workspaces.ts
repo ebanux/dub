@@ -1,5 +1,5 @@
 import { UserProps } from "@/lib/types";
-import { prismaEdge } from "@dub/prisma/edge";
+import { conn } from "@/lib/planetscale/connection";
 import { NextRequest, NextResponse } from "next/server";
 import { getDefaultWorkspace } from "./utils/get-default-workspace";
 import { getWorkspaceProduct } from "./utils/get-workspace-product";
@@ -43,21 +43,20 @@ export async function WorkspacesMiddleware(req: NextRequest, user: UserProps) {
   }
 
   // Redirect user to the accept invite modal if they have a pending invite
-  const projectInvite = await prismaEdge.projectInvite.findFirst({
-    where: {
-      email: user.email,
-      expires: {
-        gte: new Date(),
-      },
-    },
-    select: {
-      project: {
-        select: {
-          slug: true,
-        },
-      },
-    },
-  });
+  let projectInvite: { project: { slug: string } } | null = null;
+  if (user.email) {
+    const { rows } = await conn.execute(
+      `SELECT P.slug 
+       FROM ProjectInvite PI
+       JOIN Project P ON P.id = PI.projectId
+       WHERE PI.email = ? AND PI.expires >= NOW()
+       LIMIT 1`,
+      [user.email],
+    );
+    if (rows && rows.length > 0) {
+      projectInvite = { project: { slug: (rows[0] as any).slug } };
+    }
+  }
 
   if (projectInvite) {
     return NextResponse.redirect(

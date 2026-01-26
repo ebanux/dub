@@ -1,6 +1,6 @@
 import { programLanderImageBlockSchema } from "@/lib/zod/schemas/program-lander";
 import { ZoomImage } from "@/ui/shared/zoom-image";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 export function ImageBlock({
   block,

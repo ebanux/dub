@@ -4,7 +4,7 @@ import { partnerProfilePayoutsQuerySchema } from "@/lib/zod/schemas/partner-prof
 import { PartnerPayoutResponseSchema } from "@/lib/zod/schemas/payouts";
 import { prisma } from "@dub/prisma";
 import { NextResponse } from "next/server";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 // GET /api/partner-profile/payouts - get all payouts for a partner
 export const GET = withPartnerProfile(async ({ partner, searchParams }) => {

@@ -1,6 +1,6 @@
 import { fetcher } from "@dub/utils";
 import useSWR from "swr";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { PayoutResponse } from "../types";
 import { payoutsQuerySchema } from "../zod/schemas/payouts";
 import useWorkspace from "./use-workspace";

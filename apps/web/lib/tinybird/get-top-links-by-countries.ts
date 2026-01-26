@@ -1,4 +1,4 @@
-import * as z from "zod/v4";
+import * as z from "zod";
 import { formatUTCDateTimeClickhouse } from "../analytics/utils/format-utc-datetime-clickhouse";
 import { getStartEndDates } from "../analytics/utils/get-start-end-dates";
 import { tb } from "./client";

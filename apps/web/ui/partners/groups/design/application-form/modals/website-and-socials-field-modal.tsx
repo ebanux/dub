@@ -19,7 +19,7 @@ import { motion } from "motion/react";
 import { Dispatch, SetStateAction, useCallback, useId } from "react";
 import { useForm } from "react-hook-form";
 import { v4 as uuid } from "uuid";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 type WebsiteAndSocialsFieldData = z.infer<
   typeof programApplicationFormWebsiteAndSocialsFieldSchema

@@ -3,7 +3,7 @@ import { withWorkspace } from "@/lib/auth";
 import { PartnerCommentSchema } from "@/lib/zod/schemas/programs";
 import { prisma } from "@dub/prisma";
 import { NextResponse } from "next/server";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 // GET /api/partners/:id/comments – Get partner comments
 export const GET = withWorkspace(

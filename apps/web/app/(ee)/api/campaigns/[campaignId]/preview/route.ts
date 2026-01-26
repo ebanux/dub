@@ -10,7 +10,7 @@ import { CampaignSchema } from "@/lib/zod/schemas/campaigns";
 import { sendBatchEmail } from "@dub/email";
 import CampaignEmail from "@dub/email/templates/campaign-email";
 import { NextResponse } from "next/server";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 const sendPreviewEmailSchema = CampaignSchema.pick({
   subject: true,

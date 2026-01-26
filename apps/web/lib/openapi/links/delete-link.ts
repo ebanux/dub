@@ -1,6 +1,6 @@
 import { openApiErrorResponses } from "@/lib/openapi/responses";
 import { ZodOpenApiOperationObject } from "zod-openapi";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 export const deleteLink: ZodOpenApiOperationObject = {
   operationId: "deleteLink",

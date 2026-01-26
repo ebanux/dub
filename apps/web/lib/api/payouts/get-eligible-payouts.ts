@@ -5,7 +5,7 @@ import {
 } from "@/lib/zod/schemas/payouts";
 import { prisma } from "@dub/prisma";
 import { Program, Project } from "@dub/prisma/client";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { getEffectivePayoutMode } from "./get-effective-payout-mode";
 import { getPayoutEligibilityFilter } from "./payout-eligibility-filter";
 

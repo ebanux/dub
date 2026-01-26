@@ -7,7 +7,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { mutate } from "swr";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 interface AddCustomerModalProps {
   showModal: boolean;

@@ -2,7 +2,7 @@ import { handleAndReturnErrorResponse } from "@/lib/api/errors";
 import { verifyQstashSignature } from "@/lib/cron/verify-qstash";
 import { prisma } from "@dub/prisma";
 import { log } from "@dub/utils";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { logAndRespond } from "../../utils";
 import { queueExternalPayouts } from "./queue-external-payouts";
 import { queueStripePayouts } from "./queue-stripe-payouts";

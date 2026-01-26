@@ -9,7 +9,7 @@ import {
 import { prisma } from "@dub/prisma";
 import { PartnerRole } from "@dub/prisma/client";
 import { NextResponse } from "next/server";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 // GET /api/partner-profile/users - list of users
 export const GET = withPartnerProfile(async ({ partner, searchParams }) => {

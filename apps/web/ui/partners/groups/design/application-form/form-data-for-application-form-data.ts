@@ -8,7 +8,7 @@ import {
   programApplicationFormShortTextFieldWithValueSchema,
   programApplicationFormWebsiteAndSocialsFieldWithValueSchema,
 } from "@/lib/zod/schemas/program-application-form";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 export const formDataForApplicationFormData = (
   fields: z.infer<typeof programApplicationFormFieldSchema>[],

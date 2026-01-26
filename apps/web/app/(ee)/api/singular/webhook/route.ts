@@ -6,7 +6,7 @@ import { trackSingularSaleEvent } from "@/lib/integrations/singular/track-sale";
 import { prisma } from "@dub/prisma";
 import { getSearchParams } from "@dub/utils";
 import { NextResponse } from "next/server";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 const singularToDubEvent = {
   activated: "lead",

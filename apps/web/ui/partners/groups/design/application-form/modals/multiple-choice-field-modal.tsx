@@ -13,7 +13,7 @@ import { cn } from "@dub/utils";
 import { Dispatch, SetStateAction, useId, useRef } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { v4 as uuid } from "uuid";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 type MultipleChoiceFieldData = z.infer<
   typeof programApplicationFormMultipleChoiceFieldSchema

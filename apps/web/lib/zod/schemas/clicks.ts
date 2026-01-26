@@ -1,4 +1,4 @@
-import * as z from "zod/v4";
+import * as z from "zod";
 import { commonDeprecatedEventFields } from "./deprecated";
 import { linkEventSchema } from "./links";
 

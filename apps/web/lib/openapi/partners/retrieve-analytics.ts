@@ -4,7 +4,7 @@ import {
   partnerAnalyticsResponseSchema,
 } from "@/lib/zod/schemas/partners";
 import { ZodOpenApiOperationObject } from "zod-openapi";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 export const retrievePartnerAnalytics: ZodOpenApiOperationObject = {
   operationId: "retrievePartnerAnalytics",

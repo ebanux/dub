@@ -9,7 +9,7 @@ import { getPlanCapabilities } from "@/lib/plan-capabilities";
 import { prisma } from "@dub/prisma";
 import { APP_DOMAIN_WITH_NGROK } from "@dub/utils";
 import { waitUntil } from "@vercel/functions";
-import * as z from "zod/v4";
+import * as z from "zod";
 import {
   MessageSchema,
   messagePartnerSchema,

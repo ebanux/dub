@@ -48,7 +48,7 @@ import {
   useFormContext,
 } from "react-hook-form";
 import { toast } from "sonner";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { useConfirmCreateBountyModal } from "./confirm-create-bounty-modal";
 
 type BountySheetProps = {

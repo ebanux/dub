@@ -7,7 +7,7 @@ import {
 } from "@/lib/webhook/types";
 import { Link } from "@dub/prisma/client";
 import { capitalize } from "@dub/utils";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 const integration = {
   name: "dub",

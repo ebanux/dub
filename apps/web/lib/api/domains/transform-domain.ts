@@ -3,7 +3,7 @@ import {
   RegisteredDomainSchema,
 } from "@/lib/zod/schemas/domains";
 import { Domain } from "@dub/prisma/client";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 type RegisteredDomain = z.infer<typeof RegisteredDomainSchema>;
 

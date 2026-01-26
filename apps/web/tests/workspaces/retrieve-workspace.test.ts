@@ -1,7 +1,7 @@
 import { WorkspaceSchema } from "@/lib/zod/schemas/workspaces";
 import { Project } from "@dub/prisma/client";
 import { describe, expect, test } from "vitest";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { IntegrationHarness } from "../utils/integration";
 
 describe("GET /workspaces/{idOrSlug}", async () => {

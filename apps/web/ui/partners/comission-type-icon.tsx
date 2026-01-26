@@ -6,7 +6,7 @@ import {
   UserCheck,
 } from "@dub/ui/icons";
 import { cn } from "@dub/utils";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 const ICONS_MAP = {
   click: { icon: CursorRays, className: "text-blue-500" },

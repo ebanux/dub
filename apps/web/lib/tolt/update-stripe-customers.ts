@@ -8,13 +8,12 @@ import { ToltImportPayload } from "./types";
 
 const CUSTOMERS_PER_BATCH = 20;
 
-const stripe = stripeAppClient({
-  ...(process.env.VERCEL_ENV && { mode: "live" }),
-});
-
 // Tolt API doesn't return the Stripe customer ID,
 // so we'll search for Stripe customers by email and update the customer record with the Stripe customer ID, if found.
 export async function updateStripeCustomers(payload: ToltImportPayload) {
+  const stripe = stripeAppClient({
+    ...(process.env.VERCEL_ENV && { mode: "live" }),
+  });
   let { importId, programId, startingAfter } = payload;
 
   const { workspace } = await prisma.program.findUniqueOrThrow({
@@ -73,6 +72,7 @@ export async function updateStripeCustomers(payload: ToltImportPayload) {
     await Promise.allSettled(
       customers.map((customer) =>
         searchStripeAndUpdateCustomer({
+          stripe,
           workspace,
           customer,
           importId,
@@ -94,10 +94,12 @@ export async function updateStripeCustomers(payload: ToltImportPayload) {
 }
 
 async function searchStripeAndUpdateCustomer({
+  stripe,
   workspace,
   customer,
   importId,
 }: {
+  stripe: Stripe;
   workspace: Pick<Project, "id" | "slug" | "stripeConnectId">;
   customer: Pick<Customer, "id" | "email">;
   importId: string;

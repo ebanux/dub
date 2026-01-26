@@ -3,7 +3,7 @@ import { withWorkspace } from "@/lib/auth";
 import { prisma } from "@dub/prisma";
 import { BountySubmissionStatus } from "@dub/prisma/client";
 import { NextResponse } from "next/server";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 const bountiesSubmissionsCountQuerySchema = z.object({
   bountyId: z.string().optional(),

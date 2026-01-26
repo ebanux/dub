@@ -1,6 +1,6 @@
 import { fetcher } from "@dub/utils";
 import useSWR, { SWRConfiguration } from "swr";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { countMessagesQuerySchema } from "../zod/schemas/messages";
 
 const partialQuerySchema = countMessagesQuerySchema.partial();

@@ -7,7 +7,7 @@ import { InvoiceStatus, Prisma } from "@dub/prisma/client";
 import { ACME_PROGRAM_ID } from "@dub/utils";
 import { format } from "date-fns";
 import { NextResponse } from "next/server";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 interface TimeseriesPoint {
   payouts: number;

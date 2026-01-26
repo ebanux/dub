@@ -13,7 +13,7 @@ import { NotificationEmailType } from "@dub/prisma/client";
 import { APP_DOMAIN_WITH_NGROK, chunk, log } from "@dub/utils";
 import { differenceInMinutes } from "date-fns";
 import { headers } from "next/headers";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { logAndRespond } from "../../utils";
 
 export const dynamic = "force-dynamic";

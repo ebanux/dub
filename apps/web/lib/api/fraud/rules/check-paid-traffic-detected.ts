@@ -1,6 +1,6 @@
 import { FraudEventContext, PaidTrafficPlatform } from "@/lib/types";
 import { getSearchParams } from "@dub/utils";
-import * as z from "zod/v4";
+import * as z from "zod";
 import {
   PAID_TRAFFIC_PLATFORMS,
   PAID_TRAFFIC_PLATFORMS_CONFIG,

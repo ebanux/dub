@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import "server-only";
 import { generateErrorMessage } from "zod-error";
 import { ZodOpenApiResponseObject } from "zod-openapi";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { logger } from "../axiom/server";
 import { ErrorCode } from "./error-codes";
 

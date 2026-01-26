@@ -6,7 +6,7 @@ import { usageQuerySchema, usageResponse } from "@/lib/zod/schemas/usage";
 import { prisma } from "@dub/prisma";
 import { subYears } from "date-fns";
 import { NextResponse } from "next/server";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 export const GET = withWorkspace(async ({ searchParams, workspace }) => {
   const {

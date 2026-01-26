@@ -21,7 +21,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import useSWR from "swr";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 export function PayoutMethodsDropdown() {
   const router = useRouter();

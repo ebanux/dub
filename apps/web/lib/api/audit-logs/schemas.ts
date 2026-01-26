@@ -9,7 +9,7 @@ import { PartnerSchema } from "@/lib/zod/schemas/partners";
 import { PayoutSchema } from "@/lib/zod/schemas/payouts";
 import { ProgramSchema } from "@/lib/zod/schemas/programs";
 import { RewardSchema } from "@/lib/zod/schemas/rewards";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 // Schema that represents the audit log schema in Tinybird
 export const auditLogSchemaTB = z.object({

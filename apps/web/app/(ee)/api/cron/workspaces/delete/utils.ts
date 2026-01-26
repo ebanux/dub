@@ -1,6 +1,6 @@
 import { qstash } from "@/lib/cron";
 import { APP_DOMAIN_WITH_NGROK } from "@dub/utils";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { logAndRespond } from "../../utils";
 
 export const deleteWorkspaceSchema = z.object({

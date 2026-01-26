@@ -12,7 +12,7 @@ import {
 import { prisma } from "@dub/prisma";
 import { nanoid } from "@dub/utils";
 import slugify from "@sindresorhus/slugify";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { authActionClient } from "../../safe-action";
 
 // Base schema for all resource types

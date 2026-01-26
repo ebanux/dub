@@ -1,5 +1,5 @@
 import { EventType, RewardStructure } from "@dub/prisma/client";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { getPaginationQuerySchema, maxDurationSchema } from "./misc";
 
 export const COMMISSION_TYPES = [

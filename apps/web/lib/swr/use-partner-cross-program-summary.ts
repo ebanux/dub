@@ -1,7 +1,7 @@
 import { partnerCrossProgramSummarySchema } from "@/lib/zod/schemas/partners";
 import { fetcher } from "@dub/utils";
 import useSWR from "swr";
-import * as z from "zod/v4";
+import * as z from "zod";
 import useWorkspace from "./use-workspace";
 
 type CrossProgramSummary = z.infer<typeof partnerCrossProgramSummarySchema>;

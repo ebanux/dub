@@ -1,6 +1,6 @@
 import { PROGRAM_ONBOARDING_PARTNERS_LIMIT } from "@/lib/constants/program";
 import { PartnerLinkStructure, RewardStructure } from "@dub/prisma/client";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { maxDurationSchema } from "./misc";
 import { updateProgramSchema } from "./programs";
 import {

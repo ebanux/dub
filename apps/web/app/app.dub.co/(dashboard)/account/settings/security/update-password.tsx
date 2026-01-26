@@ -5,7 +5,7 @@ import { PasswordRequirements } from "@/ui/shared/password-requirements";
 import { Button, Input, Label } from "@dub/ui";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 // Allow the user to update their existing password
 export const UpdatePassword = () => {

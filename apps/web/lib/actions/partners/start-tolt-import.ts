@@ -3,7 +3,7 @@
 import { createId } from "@/lib/api/create-id";
 import { getDefaultProgramIdOrThrow } from "@/lib/api/programs/get-default-program-id-or-throw";
 import { toltImporter } from "@/lib/tolt/importer";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { getProgramOrThrow } from "../../api/programs/get-program-or-throw";
 import { authActionClient } from "../safe-action";
 

@@ -1,4 +1,4 @@
-import * as z from "zod/v4";
+import * as z from "zod";
 import { DubApiError } from "../api/errors";
 import { partnerIdTenantIdSchema } from "../zod/schemas/partners";
 

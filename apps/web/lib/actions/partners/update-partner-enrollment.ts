@@ -9,7 +9,7 @@ import { getProgramEnrollmentOrThrow } from "@/lib/api/programs/get-program-enro
 import { recordLink } from "@/lib/tinybird";
 import { prisma } from "@dub/prisma";
 import { waitUntil } from "@vercel/functions";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { authActionClient } from "../safe-action";
 
 const updatePartnerEnrollmentSchema = z.object({

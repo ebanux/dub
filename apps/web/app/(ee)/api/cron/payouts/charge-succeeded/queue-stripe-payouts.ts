@@ -2,7 +2,7 @@ import { qstash } from "@/lib/cron";
 import { prisma } from "@dub/prisma";
 import { Invoice } from "@dub/prisma/client";
 import { APP_DOMAIN_WITH_NGROK, chunk, log } from "@dub/utils";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 const stripeChargeMetadataSchema = z.object({
   id: z.string(), // Stripe charge id

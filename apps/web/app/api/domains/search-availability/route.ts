@@ -3,7 +3,7 @@ import { searchDomainsAvailability } from "@/lib/dynadot/search-domains";
 import { ratelimit } from "@/lib/upstash";
 import { prisma } from "@dub/prisma";
 import { NextResponse } from "next/server";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 const schema = z.object({
   domain: z

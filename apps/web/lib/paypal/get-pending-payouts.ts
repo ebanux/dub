@@ -1,7 +1,7 @@
 import { prisma } from "@dub/prisma";
 import { PayoutStatus } from "@dub/prisma/client";
 import { PAYPAL_SUPPORTED_COUNTRIES } from "@dub/utils";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { PartnerSchema } from "../zod/schemas/partners";
 import { ProgramSchema } from "../zod/schemas/programs";
 

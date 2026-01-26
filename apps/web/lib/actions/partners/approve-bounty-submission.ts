@@ -8,7 +8,7 @@ import { sendEmail } from "@dub/email";
 import BountyApproved from "@dub/email/templates/bounty-approved";
 import { prisma } from "@dub/prisma";
 import { waitUntil } from "@vercel/functions";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { authActionClient } from "../safe-action";
 
 const schema = z.object({

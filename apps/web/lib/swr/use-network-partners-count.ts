@@ -1,7 +1,7 @@
 import { useRouterStuff } from "@dub/ui";
 import { fetcher } from "@dub/utils";
 import useSWR, { SWRConfiguration } from "swr";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { getNetworkPartnersCountQuerySchema } from "../zod/schemas/partner-network";
 import useWorkspace from "./use-workspace";
 

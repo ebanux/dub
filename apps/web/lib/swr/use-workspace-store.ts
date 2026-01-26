@@ -3,7 +3,7 @@
 import { useAction } from "next-safe-action/hooks";
 import { useEffect, useState } from "react";
 import { mutate } from "swr";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { updateWorkspaceStore } from "../actions/update-workspace-store";
 import { workspaceStoreKeys } from "../zod/schemas/workspaces";
 import useWorkspace from "./use-workspace";

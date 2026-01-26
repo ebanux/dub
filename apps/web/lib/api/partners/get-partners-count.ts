@@ -1,7 +1,7 @@
 import { partnersCountQuerySchema } from "@/lib/zod/schemas/partners";
 import { prisma, sanitizeFullTextSearch } from "@dub/prisma";
 import { Prisma, ProgramEnrollmentStatus } from "@dub/prisma/client";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 type PartnersCountFilters = z.infer<typeof partnersCountQuerySchema> & {
   programId: string;

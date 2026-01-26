@@ -14,7 +14,7 @@ import { sendEmail } from "@dub/email";
 import PartnerBanned from "@dub/email/templates/partner-banned";
 import { prisma } from "@dub/prisma";
 import { FraudRuleType } from "@dub/prisma/client";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { logAndRespond } from "../../../utils";
 import { cancelCommissions } from "./cancel-commissions";
 

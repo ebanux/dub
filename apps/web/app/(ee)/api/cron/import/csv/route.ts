@@ -21,7 +21,7 @@ import {
 } from "@dub/utils";
 import { getUrlObjFromString } from "@dub/utils/src";
 import { NextResponse } from "next/server";
-import * as z from "zod/v4";
+import * as z from "zod";
 import { sendCsvImportEmails } from "./utils";
 
 export const dynamic = "force-dynamic";

@@ -4,7 +4,7 @@ import { parseRequestBody } from "@/lib/api/utils";
 import { withWorkspace } from "@/lib/auth";
 import { trackLeadRequestSchema } from "@/lib/zod/schemas/leads";
 import { NextResponse } from "next/server";
-import * as z from "zod/v4";
+import * as z from "zod";
 
 // POST /api/track/lead – Track a lead conversion event
 export const POST = withWorkspace(
